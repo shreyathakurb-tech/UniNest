@@ -1,0 +1,1658 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>UniNest | Find Your Perfect Student Accommodation</title>
+
+    <script>
+        const savedTheme = localStorage.getItem("theme");
+
+        if (savedTheme) {
+            document.documentElement.setAttribute(
+                "data-theme",
+                savedTheme
+            );
+        }
+    </script>
+
+    <link rel="stylesheet" href="style1.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="stylesheet" href="auth.css">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+
+    <link rel="stylesheet" href="chatbot.css">
+
+
+    <link rel="stylesheet" href="roommate.css">
+
+
+</head>
+
+<body>
+
+    <!-- ========================= -->
+    <!-- Animated Background -->
+    <!-- ========================= -->
+
+    <div class="bg-grid"></div>
+    <div class="bg-glow glow1"></div>
+    <div class="bg-glow glow2"></div>
+    <div class="bg-glow glow3"></div>
+
+    <!-- ========================= -->
+    <!-- Navbar -->
+    <!-- ========================= -->
+
+    <nav class="navbar">
+
+        <div class="container nav-container">
+
+            <div class="logo">
+
+                <div class="logo-circle">
+                    <i class="fa-solid fa-house"></i>
+                </div>
+
+                <div>
+                    <h2>UniNest</h2>
+                    <span>Student Accommodation</span>
+                </div>
+
+            </div>
+
+            <ul class="nav-links">
+
+                <li><a href="#">Home</a></li>
+
+                <li><a href="#listings">Listings</a></li>
+
+                <li><a href="#universities">Universities</a></li>
+
+                <li><a href="#reviews">Reviews</a></li>
+
+                <li><a href="#faq">FAQ</a></li>
+
+            </ul>
+
+            <div class="nav-right">
+
+                <button id="themeToggle" class="theme-btn">
+
+                    <i class="fa-solid fa-moon"></i>
+
+                </button>
+
+                <div class="user-wrapper">
+
+                    <button class="login-btn" id="openAuth">
+                        Sign In
+                    </button>
+
+                    <div id="userMenu" class="user-menu">
+
+                        <button id="myPropertiesBtn">
+                            My Properties
+                        </button>
+
+                        <button id="logoutBtn">
+                            Logout
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <button class="primary-btn" id="listPropertyBtn">
+                    List Property
+                </button>
+
+                <a href="#" id="myFavouritesBtn">
+                    <i class="fa-regular fa-heart"></i>
+                    My Favourites
+                    <span class="favourite-count">0</span>
+                </a>
+
+                <button id="menuBtn" class="menu-btn">
+
+                    <i class="fa-solid fa-bars"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+    <!-- ========================= -->
+    <!-- Mobile Menu -->
+    <!-- ========================= -->
+
+    <div class="mobile-menu" id="mobileMenu">
+
+        <a href="#">Home</a>
+
+        <a href="#listings">Listings</a>
+
+        <a href="#universities">Universities</a>
+
+        <a href="#roommate">Roommate Finder</a>
+
+        <a href="#reviews">Reviews</a>
+
+        <a href="#faq">FAQ</a>
+
+        <button class="primary-btn mobile-btn">
+            List Property
+        </button>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- Hero -->
+    <!-- ========================= -->
+
+    <section class="hero">
+
+        <div class="container hero-container">
+
+            <div class="hero-left">
+
+                <div class="hero-badge">
+
+                    <span class="live-dot"></span>
+
+                    Trusted by 25,000+ Students Across India
+
+                </div>
+
+                <h1>
+
+                    Find Your
+
+                    <span class="gradient-text">
+
+                        Perfect Student Home
+
+                    </span>
+
+                    Near Your Dream University
+
+                </h1>
+
+                <p>
+
+                    Verified rooms, hostels, PGs and apartments with
+                    transparent pricing, student reviews,
+                    safety ratings and zero brokerage.
+
+                </p>
+
+                <!-- Search Box -->
+
+                <div class="search-box">
+
+                    <div class="search-item">
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                        <input type="text" id="searchInput" placeholder="Search University or City">
+
+                    </div>
+
+                    <div class="search-divider"></div>
+
+                    <div class="search-item">
+
+                        <i class="fa-solid fa-wallet"></i>
+
+                        <select id="budgetFilter">
+
+                            <option value="all">
+                                Any Budget
+                            </option>
+
+                            <option value="under5000">
+                                Under ₹5,000
+                            </option>
+
+                            <option value="5000-10000">
+                                ₹5,000 - ₹10,000
+                            </option>
+
+                            <option value="10000-20000">
+                                ₹10,000 - ₹20,000
+                            </option>
+
+                            <option value="20000-30000">
+                                ₹20,000 - ₹30,000
+                            </option>
+
+                            <option value="above30000">
+                                Above ₹30,000
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="search-divider"></div>
+
+                    <div class="search-item">
+
+                        <i class="fa-solid fa-bed"></i>
+
+                        <select id="roomFilter">
+
+                            <option value="all">
+                                Room Type
+                            </option>
+
+                            <option value="single">
+                                Single Room
+                            </option>
+
+                            <option value="shared">
+                                Shared Room
+                            </option>
+
+                            <option value="studio">
+                                Studio
+                            </option>
+
+                            <option value="flat">
+                                Flat
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="search-divider"></div>
+
+                    <div class="search-item">
+
+                        <i class="fa-solid fa-users"></i>
+
+                        <select id="genderFilter">
+
+                            <option value="all">
+                                Any
+                            </option>
+
+                            <option value="boys">
+                                Boys
+                            </option>
+
+                            <option value="girls">
+                                Girls
+                            </option>
+
+                            <option value="unisex">
+                                Unisex
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <button class="search-btn">
+
+                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                    </button>
+
+                </div>
+
+                <!-- Popular Searches -->
+
+                <div class="popular-searches">
+
+                    <span>Popular :</span>
+
+                    <button>IIT Bombay</button>
+
+                    <button>Delhi University</button>
+
+                    <button>VIT Vellore</button>
+
+                    <button>BITS Pilani</button>
+
+                    <button>Pune University</button>
+
+                </div>
+
+                <!-- Hero Stats -->
+
+                <div class="hero-stats">
+
+                    <div class="stat-card">
+
+                        <h2>5200+</h2>
+
+                        <p>Active Listings</p>
+
+                    </div>
+
+                    <div class="stat-card">
+
+                        <h2>120+</h2>
+
+                        <p>Universities</p>
+
+                    </div>
+
+                    <div class="stat-card">
+
+                        <h2>98%</h2>
+
+                        <p>Verified Rooms</p>
+
+                    </div>
+
+                    <div class="stat-card">
+
+                        <h2>4.9★</h2>
+
+                        <p>Student Rating</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ========================= -->
+    <!-- AI Recommendation Banner -->
+    <!-- ========================= -->
+
+    <section class="ai-banner">
+
+        <div class="container ai-container">
+
+            <div>
+
+                <span class="ai-tag">
+
+                    🤖 AI Powered
+
+                </span>
+
+                <h2>
+
+                    AI Accommodation Assistant
+
+                </h2>
+
+                <p>
+
+                    Tell us your university, budget and preferences, and our AI will suggest nearby universities and
+                    accommodation options that match your needs.
+
+                </p>
+
+            </div>
+
+            <button class="find-room-btn" id="openChat"
+                onclick="document.querySelector('.chatbot').style.display='flex'">
+                Find My Room
+            </button>
+        </div>
+
+    </section>
+
+    <!-- ========================= -->
+    <!-- Featured Listings Starts -->
+    <!-- ========================= -->
+    <section class="listings" id="listings">
+
+        <div class="container">
+            <div class="section-header">
+
+                <div>
+
+                    <span class="section-tag">
+                        Latest Properties
+                    </span>
+
+                    <h2>
+                        Student Listings Added By Users
+                    </h2>
+
+                </div>
+
+                <button id="viewAllLatestBtn" class="view-all-btn">
+                    View All →
+                </button>
+
+            </div>
+
+            <div class="listing-grid" id="latestProperties"></div>
+            <hr style="margin:50px 0;">
+
+            <div class="section-header">
+
+                <div>
+
+                    <span class="section-tag">
+
+                        Featured Properties
+
+                    </span>
+
+                    <h2>
+
+                        Handpicked Student Accommodation
+
+                    </h2>
+
+                </div>
+
+                <button id="viewAllFeaturedBtn" class="view-all-btn">
+                    View All →
+                </button>
+
+            </div>
+
+            <div class="listing-grid" id="propertyContainer">
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================= -->
+    <!-- WHY CHOOSE UNINEST -->
+    <!-- ========================= -->
+
+    <section class="why-section">
+
+        <div class="container">
+
+            <div class="section-header center">
+
+                <span class="section-tag">
+
+                    Why Choose UniNest
+
+                </span>
+
+                <h2>
+
+                    Everything A Student Needs
+
+                </h2>
+
+                <p>
+
+                    Safe, verified and affordable accommodation
+                    designed especially for students.
+
+                </p>
+
+            </div>
+
+            <div class="why-grid">
+
+                <div class="why-card">
+
+                    <div class="why-icon">
+                        🛡️
+                    </div>
+
+                    <h3>
+                        Verified Listings
+                    </h3>
+
+                    <p>
+                        Every property is manually verified for
+                        authenticity and safety.
+                    </p>
+
+                </div>
+
+                <div class="why-card">
+
+                    <div class="why-icon">
+                        💸
+                    </div>
+
+                    <h3>
+                        Zero Brokerage
+                    </h3>
+
+                    <p>
+                        No hidden charges and transparent pricing.
+                    </p>
+
+                </div>
+
+                <div class="why-card">
+
+                    <div class="why-icon">
+                        👥
+                    </div>
+
+                    <h3>
+                        Roommate Finder
+                    </h3>
+
+                    <p>
+                        Find compatible roommates with similar
+                        preferences and budget.
+                    </p>
+
+                </div>
+
+                <div class="why-card">
+
+                    <div class="why-icon">
+                        📞
+                    </div>
+
+                    <h3>
+                        Direct Contact
+                    </h3>
+
+                    <p>
+                        Chat with landlords and schedule visits
+                        instantly.
+                    </p>
+
+                </div>
+
+                <div class="why-card">
+
+                    <div class="why-icon">
+                        ⭐
+                    </div>
+
+                    <h3>
+                        Student Reviews
+                    </h3>
+
+                    <p>
+                        Genuine reviews from students already
+                        living there.
+                    </p>
+
+                </div>
+
+                <div class="why-card">
+
+                    <div class="why-icon">
+                        📍
+                    </div>
+
+                    <h3>
+                        Near Universities
+                    </h3>
+
+                    <p>
+                        Find accommodation within walking distance
+                        of your campus.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+    <!-- ========================= -->
+    <!-- BROWSE BY UNIVERSITY -->
+    <!-- ========================= -->
+
+    <section class="universities-section" id="universities">
+
+        <div class="container">
+
+            <div class="section-header center">
+
+                <span class="section-tag">
+                    Browse by University
+                </span>
+
+                <h2>
+                    Find Accommodation Near Top Universities
+                </h2>
+
+                <p>
+                    Explore verified student housing near India's leading universities.
+                </p>
+
+            </div>
+
+            <div class="university-grid">
+
+                <div class="university-card">
+                    <div class="uni-icon">🎓</div>
+                    <h3>IIT Bombay</h3>
+                    <p>340+ Listings</p>
+                </div>
+
+                <div class="university-card">
+                    <div class="uni-icon">🏫</div>
+                    <h3>Delhi University</h3>
+                    <p>520+ Listings</p>
+                </div>
+
+                <div class="university-card">
+                    <div class="uni-icon">📚</div>
+                    <h3>BITS Pilani</h3>
+                    <p>180+ Listings</p>
+                </div>
+
+                <div class="university-card">
+                    <div class="uni-icon">🏛️</div>
+                    <h3>VIT Vellore</h3>
+                    <p>270+ Listings</p>
+                </div>
+
+                <div class="university-card">
+                    <div class="uni-icon">🎒</div>
+                    <h3>Pune University</h3>
+                    <p>310+ Listings</p>
+                </div>
+
+                <div class="university-card">
+                    <div class="uni-icon">📖</div>
+                    <h3>Mumbai University</h3>
+                    <p>450+ Listings</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ========================= -->
+    <!-- ROOMMATE FINDER -->
+    <!-- ========================= -->
+
+    <!-- ========================= -->
+    <!-- AI RECOMMENDATION -->
+    <!-- ========================= -->
+
+    <section class="ai-section">
+
+        <div class="container">
+
+            <div class="ai-card">
+
+                <div class="ai-left">
+
+                    <span class="section-tag">
+
+                        🤖 AI Assistant
+
+                    </span>
+
+                    <h2>
+
+                        Find Your Perfect Roommate
+
+                    </h2>
+
+                    <p>
+
+                        Tell us your university, budget and lifestyle preferences,
+                        and our AI will match you with compatible roommates.
+                    </p>
+
+                </div>
+
+                <div class="ai-right">
+                    <button class="find-room-btn" id="openRoommateChat">
+
+                        Start AI Search
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- TESTIMONIALS -->
+    <!-- ========================= -->
+
+    <section class="testimonial-section" id="reviews">
+
+        <div class="container">
+
+            <div class="section-header center">
+
+                <span class="section-tag">
+
+                    Testimonials
+
+                </span>
+
+                <h2>
+
+                    What Our Students Say
+
+                </h2>
+
+            </div>
+
+            <div class="testimonial-grid">
+
+                <div class="testimonial-card">
+
+                    <p>
+
+                        "Found my room within 2 days.
+                        Super smooth experience."
+
+                    </p>
+
+                    <h4>
+
+                        Aryan • IIT Bombay
+
+                    </h4>
+
+                </div>
+
+                <div class="testimonial-card">
+
+                    <p>
+
+                        "Verified listings and no hidden charges.
+                        Highly recommended."
+
+                    </p>
+
+                    <h4>
+
+                        Sarah • Delhi University
+
+                    </h4>
+
+                </div>
+
+                <div class="testimonial-card">
+
+                    <p>
+
+                        "The roommate finder was amazing.
+                        Made a new friend too."
+
+                    </p>
+
+                    <h4>
+
+                        Priya • BITS Pilani
+
+                    </h4>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+    <!-- ========================= -->
+    <!-- FAQ SECTION -->
+    <!-- ========================= -->
+
+    <section class="faq-section" id="faq">
+
+        <div class="container">
+
+            <div class="section-header center">
+
+                <span class="section-tag">
+                    Frequently Asked Questions
+                </span>
+
+                <h2>
+                    Everything You Need To Know
+                </h2>
+
+                <p>
+                    Common questions asked by students before booking accommodation.
+                </p>
+
+            </div>
+
+            <div class="faq-container">
+
+                <div class="faq-item">
+
+                    <button class="faq-question">
+
+                        Is every property verified?
+
+                        <span>+</span>
+
+                    </button>
+
+                    <div class="faq-answer">
+
+                        Yes. Every listing is verified before being published on UniNest.
+
+                    </div>
+
+                </div>
+
+                <div class="faq-item">
+
+                    <button class="faq-question">
+
+                        Is there any brokerage fee?
+
+                        <span>+</span>
+
+                    </button>
+
+                    <div class="faq-answer">
+
+                        No. UniNest promotes zero brokerage student accommodation.
+
+                    </div>
+
+                </div>
+
+                <div class="faq-item">
+
+                    <button class="faq-question">
+
+                        Can I contact the landlord directly?
+
+                        <span>+</span>
+
+                    </button>
+
+                    <div class="faq-answer">
+
+                        Yes. Students can directly contact landlords and schedule visits.
+
+                    </div>
+
+                </div>
+
+                <div class="faq-item">
+
+                    <button class="faq-question">
+
+                        Can I save rooms for later?
+
+                        <span>+</span>
+
+                    </button>
+
+                    <div class="faq-answer">
+
+                        Yes. Simply click the heart icon to add properties to your wishlist.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+
+
+    <!-- ========================= -->
+    <!-- NEWSLETTER -->
+    <!-- ========================= -->
+
+    <section class="newsletter-section">
+
+        <div class="container">
+
+            <div class="newsletter-card">
+
+                <h2>🔔 Stay Updated</h2>
+
+                <p>
+                    Get notified when a property matching your preferences becomes available.
+                </p>
+
+                <!-- Email -->
+
+                <div class="newsletter-form">
+
+                    <input type="email" id="subscriberEmail" placeholder="Enter your email" required>
+
+                    <button class="primary-btn" id="subscribeBtn">
+
+                        Notify Me
+
+                    </button>
+
+                </div>
+
+                <!-- Advanced Preferences -->
+
+                <div class="advanced-section">
+
+                    <button id="toggleAdvanced" class="advanced-btn">
+
+                        Advanced Preferences (Optional) ▼
+
+                    </button>
+
+                    <div id="advancedFields" style="display:none; margin-top:20px;">
+
+                        <input type="text" id="subscriberUniversity" placeholder="University">
+
+                        <input type="text" id="subscriberLocation" placeholder="Preferred Location">
+
+                        <input type="number" id="subscriberBudget" placeholder="Budget">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+
+    <!-- ========================= -->
+    <!-- FOOTER -->
+    <!-- ========================= -->
+
+    <footer class="footer">
+
+        <div class="container">
+
+            <div class="footer-grid">
+
+                <div>
+
+                    <h2>
+
+                        UniNest
+
+                    </h2>
+
+                    <p>
+
+                        Making student accommodation
+                        easier, safer and smarter.
+
+                    </p>
+
+                </div>
+
+                <div>
+
+                    <h3>
+
+                        Students
+
+                    </h3>
+
+                    <ul>
+
+                        <li><a href="#listings">Browse Rooms</a></li>
+
+                        <li>
+                            <a href="#" id="footerWishlist">
+                                Wishlist
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#" id="footerAI">
+                                AI Search
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#" id="footerRoommate">
+                                Roommate Finder
+                            </a>
+                        </li>
+
+
+                    </ul>
+
+                </div>
+
+                <div>
+
+                    <h3>
+
+                        Landlords
+
+                    </h3>
+
+                    <ul>
+
+                        <li>
+                            <a href="#" id="footerListProperty">
+                                List Property
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#" id="footerManage">
+                                Manage Listings
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+
+                <div>
+
+                    <h3>
+
+                        Company
+
+                    </h3>
+
+                    <ul>
+
+                        <li>
+
+                            <a href="about.html">
+
+                                About
+
+                            </a>
+
+                        </li>
+
+                        <li><a href="policy.html">Privacy Policy</a></li>
+
+                        <li><a href="terms.html">Terms</a></li>
+
+                        <li><a href="contact.html">Contact</a></li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+            <div class="footer-bottom">
+
+                <p>
+
+                    © 2026 UniNest. All Rights Reserved.
+
+                </p>
+
+                <div class="socials">
+
+                    <!-- Instagram -->
+                    <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+
+                    <!-- WhatsApp -->
+                    <a href="https://wa.me/919999999999" target="_blank" rel="noopener noreferrer">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+    <!-- ========================= -->
+    <!-- PROPERTY DETAILS MODAL -->
+    <!-- ========================= -->
+
+    <div class="property-modal" id="propertyModal">
+
+        <div class="modal-content">
+
+            <!-- CLOSE BUTTON -->
+            <button class="close-modal">
+                ✕
+            </button>
+
+            <!-- PROPERTY IMAGE GALLERY -->
+            <div class="property-gallery">
+
+                <div class="main-gallery-image">
+
+                    <!-- PREVIOUS -->
+                    <button class="gallery-arrow gallery-prev" id="galleryPrev" style="display: none;">
+                        ❮
+                    </button>
+
+                    <!-- MAIN IMAGE -->
+                    <img id="modalImage" src="" alt="Property Image">
+
+                    <!-- NEXT -->
+                    <button class="gallery-arrow gallery-next" id="galleryNext">
+                        ❯
+                    </button>
+
+                    <!-- DOTS -->
+                    <div class="gallery-dots" id="galleryDots">
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- PROPERTY DETAILS -->
+            <div class="modal-body">
+
+                <h2 id="modalTitle">
+                    Property Title
+                </h2>
+
+                <p id="modalLocation">
+                    📍 Location
+                </p>
+
+                <h3 id="modalPrice">
+                    ₹0 / month
+                </h3>
+
+                <div class="modal-features">
+                </div>
+
+                <p id="modalDescription">
+                    Property description
+                </p>
+
+                <div class="modal-buttons">
+
+                    <button class="primary-btn" id="bookVisitBtn">
+    Book Visit
+</button>
+
+                    <button class="outline-btn" id="contactLandlordBtn">
+    Contact Landlord
+</button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ========================= -->
+    <!-- SCROLL TO TOP BUTTON -->
+    <!-- ========================= -->
+
+    <button id="scrollTopBtn">
+
+        ↑
+
+    </button>
+
+    <div class="auth-modal" id="authModal">
+
+        <div class="auth-popup">
+
+            <button class="close-auth" id="closeAuth">
+                ×
+            </button>
+
+            <div id="authContent"></div>
+
+        </div>
+
+    </div>
+
+    <div class="auth-modal" id="propertyFormModal">
+
+        <div class="auth-popup">
+
+            <button class="close-auth" id="closePropertyForm">
+                ×
+            </button>
+
+            <div class="auth-card">
+
+                <h1>List Your Property</h1>
+
+                <form id="propertyForm">
+
+                    <input type="text" id="propertyTitle" placeholder="Property Title" required>
+
+                    <input type="text" id="propertyLocation" placeholder="Location" required>
+
+                    <input type="number" id="propertyPrice" placeholder="Price" required>
+
+                    <input type="text" id="propertyRoomType" placeholder="Room Type" required>
+
+                    <input type="text" id="propertyGender" placeholder="Gender" required>
+
+                    <input type="text" id="propertyImage" placeholder="Image URL" required>
+
+                    <textarea id="propertyDescription" placeholder="Description"
+                        style="padding:10px;height:100px;"></textarea>
+
+                    <button type="submit">
+                        Add Property
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="toast" class="toast"></div>
+    <!-- AUTH MODAL -->
+
+    <div class="modal" id="myPropertiesModal">
+
+        <div class="my-properties-popup">
+
+            <button class="close-modal" id="closeMyProperties">
+
+                ✕
+
+            </button>
+
+            <h2>My Properties</h2>
+
+            <p class="my-properties-subtitle">
+
+                Manage all your listed accommodations
+
+            </p>
+
+            <div id="myPropertiesContainer"></div>
+
+        </div>
+
+    </div>
+
+    <div class="modal" id="viewAllModal">
+
+        <div class="my-properties-popup">
+
+            <button class="close-modal" id="closeViewAll">
+
+                ✕
+
+            </button>
+
+            <h2 id="viewAllTitle">
+                All Properties
+            </h2>
+
+            <p class="my-properties-subtitle">
+
+                Browse all available accommodations
+
+            </p>
+
+            <div id="viewAllContainer"></div>
+
+        </div>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- AI CHATBOT -->
+    <!-- ========================= -->
+
+    <div class="chatbot">
+
+        <div class="chat-header">
+
+            <div class="chat-title">
+
+                <div class="bot-avatar">
+                    🤖
+                </div>
+
+                <div>
+
+                    <h4>UniNest AI</h4>
+
+                    <small>Online</small>
+
+                </div>
+
+            </div>
+
+            <div class="chat-actions">
+
+                <button id="minimizeChat" title="Minimize">
+                    ─
+                </button>
+
+                <button id="maximizeChat" title="Maximize">
+                    ⛶
+                </button>
+
+                <button id="closeChat" title="Close">
+                    ✖
+                </button>
+
+            </div>
+
+        </div>
+
+        <div id="chatMessages" class="chat-body">
+
+            <div class="bot">
+                👋 Hi! I'm UniNest AI.
+
+                Tell me:
+
+                • Budget
+
+                • Preferred location
+
+                • Room type
+
+                • Boys / Girls / Unisex
+
+                I'll recommend the best properties for you.
+            </div>
+
+        </div>
+
+        <div class="chat-footer">
+
+            <input type="text" id="userInput" placeholder="Type your message...">
+
+            <button id="sendBtn">
+                Send
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="modal" id="myFavouritesModal">
+
+        <div class="my-properties-popup">
+
+            <button class="close-modal" id="closeFavourites">
+
+                ✕
+
+            </button>
+
+            <h2>❤️ My Favourites</h2>
+
+            <p class="my-properties-subtitle">
+
+                Your saved properties
+
+            </p>
+
+            <div id="myFavouritesContainer">
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- =========================
+     ROOMMATE AI CHATBOT
+========================= -->
+
+    <div class="roommate-chatbot">
+
+        <div class="chat-header">
+
+            <div class="chat-title">
+
+                <div class="bot-avatar">
+                    🤖
+                </div>
+
+                <div>
+
+                    <h4>Roommate AI</h4>
+
+                    <small>Online</small>
+
+                </div>
+
+            </div>
+
+            <div class="chat-actions">
+
+                <button id="minimizeRoommateChat" title="Minimize">
+                    ─
+                </button>
+
+                <button id="maximizeRoommateChat" title="Maximize">
+                    ⛶
+                </button>
+
+                <button id="closeRoommateChat" title="Close">
+                    ✖
+                </button>
+
+            </div>
+
+        </div>
+
+        <div id="roommateChatMessages" class="chat-body">
+
+            <div class="bot">
+
+                👋 Hi! I'm UniNest Roommate AI.
+
+                Tell me:
+
+                • Your University
+
+                • Budget
+
+                • Gender
+
+                • Preferred Location
+
+                • Room Type
+
+                • Lifestyle Preferences
+
+                I'll help you find the most compatible roommate.
+
+            </div>
+
+        </div>
+
+        <div class="chat-footer">
+
+            <input type="text" id="roommateUserInput" placeholder="Type your message...">
+
+            <button id="roommateSendBtn">
+                Send
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- CONTACT LANDLORD MODAL -->
+<!-- CONTACT LANDLORD MODAL -->
+<div id="contactLandlordModal">
+
+    <div class="contact-landlord-box">
+
+        <button
+    type="button"
+    class="close-contact-modal"
+    id="closeContactLandlord">
+    &times;
+</button>
+
+        <h2>Contact Landlord</h2>
+
+        <div class="landlord-info">
+
+            <h3 id="landlordName"></h3>
+
+            <p>
+                📧
+                <span id="landlordEmail"></span>
+            </p>
+
+            <p>
+                📞
+                <span id="landlordPhone"></span>
+            </p>
+
+        </div>
+
+        <div class="landlord-actions">
+
+            <a
+                id="landlordEmailBtn"
+                class="primary-btn">
+                Email Landlord
+            </a>
+
+            <a
+                id="landlordCallBtn"
+                class="outline-btn">
+                Call Landlord
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================
+     BOOK VISIT MODAL
+========================================= -->
+
+<div id="bookVisitModal" class="book-visit-modal">
+
+    <div class="book-visit-box">
+
+        <button
+            type="button"
+            id="closeBookVisit"
+            class="close-book-visit">
+            &times;
+        </button>
+
+        <h2>Book a Visit</h2>
+
+        <p class="book-visit-subtitle">
+            Schedule a visit to this property
+        </p>
+
+        <div class="booking-property">
+            <strong id="bookingPropertyTitle">
+                Property
+            </strong>
+        </div>
+
+        <div class="booking-form">
+
+            <label for="visitDate">
+                Select Date
+            </label>
+
+            <input
+                type="date"
+                id="visitDate"
+                required
+            >
+
+            <label for="visitTime">
+                Select Time
+            </label>
+
+            <input
+                type="time"
+                id="visitTime"
+                required
+            >
+
+            <label for="visitorName">
+                Your Name
+            </label>
+
+            <input
+                type="text"
+                id="visitorName"
+                placeholder="Enter your name"
+                required
+            >
+
+            <label for="visitorEmail">
+                Your Email
+            </label>
+
+            <input
+                type="email"
+                id="visitorEmail"
+                placeholder="Enter your email"
+                required
+            >
+
+            <button
+                type="button"
+                id="confirmVisitBtn"
+                class="primary-btn">
+                Confirm Visit
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+    <script src="app1.js"></script>
+
+    <script src="chatbot.js"></script>
+
+    <script src="roommateChatbot.js"></script>
+
+</body>
+
+
+</html>

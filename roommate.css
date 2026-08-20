@@ -1,0 +1,67 @@
+/* =========================
+   ROOMMATE CHATBOT
+========================= */
+
+.roommate-chatbot{
+
+    position:fixed;
+
+    bottom:20px;
+
+    right:20px;
+
+    width:360px;
+
+    height:520px;
+
+    background:white;
+
+    border-radius:12px;
+
+    display:none;
+
+    flex-direction:column;
+
+    overflow:hidden;
+
+    box-shadow:0 0 15px rgba(0,0,0,.2);
+
+    z-index:9999;
+
+    transition:all .35s ease;
+
+}
+
+/* Minimized */
+
+.roommate-chatbot.minimized{
+
+    height:auto;
+
+}
+
+.roommate-chatbot.minimized .chat-body,
+
+.roommate-chatbot.minimized .chat-footer{
+
+    display:none;
+
+}
+
+/* Maximized */
+
+.roommate-chatbot.maximized{
+
+    width:90vw;
+
+    height:90vh;
+
+    top:5vh;
+
+    left:5vw;
+
+    right:auto;
+
+    bottom:auto;
+
+}

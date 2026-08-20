@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Contact Us | UniNest</title>
+
+    <!-- Apply saved theme -->
+    <script>
+        const savedTheme = localStorage.getItem("theme");
+
+        if (savedTheme === "dark") {
+            document.documentElement.classList.add("dark-theme");
+        }
+    </script>
+
+    <link rel="stylesheet" href="contact.css">
+
+</head>
+
+
+<body>
+
+    <!-- =========================
+         NAVBAR
+    ========================= -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            <h2>UniNest</h2>
+        </div>
+
+        <div class="nav-links">
+
+            <a href="index1.html">
+                Home
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =========================
+         CONTACT PAGE
+    ========================= -->
+
+    <main class="contact-page">
+
+        <section class="contact-hero">
+
+            <h1>
+                Contact Us
+            </h1>
+
+            <p>
+                Have a question, suggestion or need help?
+                Get in touch with the UniNest team.
+            </p>
+
+        </section>
+
+
+        <section class="contact-container">
+
+
+            <!-- CONTACT INFORMATION -->
+
+            <div class="contact-info">
+
+                <h2>
+                    Get In Touch
+                </h2>
+
+                <p>
+                    We are here to help students find safe,
+                    affordable and comfortable accommodation.
+                </p>
+
+
+                <div class="contact-item">
+
+                    <div class="contact-icon">
+                        📧
+                    </div>
+
+                    <div>
+                        <h3>Email</h3>
+
+                        <p>
+                            support@uninest.com
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="contact-item">
+
+                    <div class="contact-icon">
+                        📍
+                    </div>
+
+                    <div>
+                        <h3>Location</h3>
+
+                        <p>
+                            Mumbai, India
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="contact-item">
+
+                    <div class="contact-icon">
+                        💬
+                    </div>
+
+                    <div>
+                        <h3>Support</h3>
+
+                        <p>
+                            We're happy to help with your queries.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CONTACT FORM -->
+
+            <div class="contact-form-card">
+
+                <h2>
+                    Send Us a Message
+                </h2>
+
+                <form id="contactForm">
+
+                    <div class="form-group">
+
+                        <label for="contactName">
+                            Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="contactName"
+                            placeholder="Enter your name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="contactEmail">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            id="contactEmail"
+                            placeholder="Enter your email"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="contactSubject">
+                            Subject
+                        </label>
+
+                        <input
+                            type="text"
+                            id="contactSubject"
+                            placeholder="What is your query?"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="contactMessage">
+                            Message
+                        </label>
+
+                        <textarea
+                            id="contactMessage"
+                            placeholder="Write your message..."
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="contact-submit-btn"
+                    >
+                        Send Message
+                    </button>
+
+                </form>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- BACK TO HOME -->
+
+        <section class="contact-footer">
+
+            <h2>
+                UniNest
+            </h2>
+
+            <p>
+                Making student accommodation easier, safer and smarter.
+            </p>
+
+            <a
+                href="index1.html"
+                class="primary-btn"
+            >
+                ← Back to Home
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+document
+    .getElementById("contactForm")
+    .addEventListener("submit", async function (e) {
+
+        e.preventDefault();
+
+        const name =
+            document.getElementById("contactName").value.trim();
+
+        const email =
+            document.getElementById("contactEmail").value.trim();
+
+        const subject =
+            document.getElementById("contactSubject").value.trim();
+
+        const message =
+            document.getElementById("contactMessage").value.trim();
+
+
+        try {
+
+            const response = await fetch(
+                "http://localhost:5000/contact",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        subject,
+                        message
+                    })
+                }
+            );
+
+
+            const data = await response.json();
+
+
+            if (response.ok) {
+
+                alert("✅ " + data.message);
+
+                this.reset();
+
+            } else {
+
+                alert("❌ " + data.message);
+
+            }
+
+        } catch (error) {
+
+            console.error("Contact Error:", error);
+
+            alert(
+                "❌ Unable to send message. Please try again."
+            );
+
+        }
+
+    });
+
+</script>
+
+
+</body>
+
+</html>

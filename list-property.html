@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Property | UniNest</title>
+
+    <link rel="stylesheet" href="style1.css">
+    <link rel="stylesheet" href="auth.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <div class="container nav-container">
+
+            <div class="logo">
+
+                <div class="logo-circle">
+                    <i class="fa-solid fa-house"></i>
+                </div>
+
+                <div>
+                    <h2>UniNest</h2>
+                    <span>Student Accommodation</span>
+                </div>
+
+            </div>
+
+            <a href="index1.html" class="outline-btn">
+                Back To Home
+            </a>
+
+        </div>
+
+    </nav>
+
+    <section class="hero">
+
+        <div class="container">
+
+            <div class="auth-card"
+                 style="max-width:700px;margin:50px auto;">
+
+                <h1>List Your Property</h1>
+
+                <form id="propertyForm">
+
+                    <input
+                        type="text"
+                        id="propertyTitle"
+                        placeholder="Property Title"
+                        required>
+
+                    <input
+                        type="text"
+                        id="propertyLocation"
+                        placeholder="Location"
+                        required>
+
+                    <input
+                        type="number"
+                        id="propertyPrice"
+                        placeholder="Price"
+                        required>
+
+                    <input
+                        type="text"
+                        id="propertyRoomType"
+                        placeholder="Room Type"
+                        required>
+
+                    <input
+                        type="text"
+                        id="propertyGender"
+                        placeholder="Gender"
+                        required>
+
+                    <textarea
+    id="propertyImage"
+    placeholder="Enter image paths, one per line&#10;/images/room.jpg&#10;/images/bathroom.jpg"
+    required
+></textarea>
+
+                    <textarea
+                        id="propertyDescription"
+                        placeholder="Description"
+                        style="height:120px;padding:12px;">
+                    </textarea>
+
+                    <button type="submit">
+                        Add Property
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <script src="list-property.js"></script>
+
+</body>
+
+</html>

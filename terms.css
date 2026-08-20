@@ -1,0 +1,285 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f6f8fc;
+    color: #222;
+}
+
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 7%;
+
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.logo h2 {
+    margin: 0;
+    color: #111;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #222;
+    font-weight: 500;
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+.terms-page {
+    padding: 80px 7% 100px;
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.terms-hero {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.terms-hero h1 {
+    font-size: 46px;
+    margin-bottom: 20px;
+    color: #111;
+}
+
+.terms-hero p {
+    max-width: 850px;
+    margin: auto;
+
+    font-size: 17px;
+    line-height: 1.8;
+
+    color: #555;
+}
+
+
+/* =========================
+   TERMS GRID
+========================= */
+
+.terms-grid {
+    max-width: 1000px;
+    margin: auto;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
+
+.terms-card {
+    background: #ffffff;
+
+    padding: 30px;
+
+    border-radius: 18px;
+
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.terms-card h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+
+    color: #111;
+    font-size: 20px;
+}
+
+.terms-card p {
+    margin: 0;
+
+    color: #555;
+
+    line-height: 1.7;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.terms-footer {
+    text-align: center;
+    margin-top: 80px;
+}
+
+.terms-footer h2 {
+    color: #111;
+}
+
+.terms-footer p {
+    color: #555;
+}
+
+
+/* =========================
+   BUTTON
+========================= */
+
+.primary-btn {
+    display: inline-block;
+
+    margin-top: 20px;
+
+    padding: 12px 25px;
+
+    background: #6a5cff;
+    color: white;
+
+    text-decoration: none;
+
+    border-radius: 10px;
+
+    font-weight: 600;
+}
+
+
+/* =========================
+   DARK THEME
+========================= */
+
+body.dark-theme {
+    background: #080b18;
+    color: white;
+}
+
+body.dark-theme .navbar {
+    background: #111522;
+    border-bottom: 1px solid #2a3042;
+}
+
+body.dark-theme .logo h2 {
+    color: white;
+}
+
+body.dark-theme .nav-links a {
+    color: white;
+}
+
+body.dark-theme .terms-hero h1 {
+    color: white;
+}
+
+body.dark-theme .terms-hero p {
+    color: #d1d5db;
+}
+
+body.dark-theme .terms-card {
+    background: #151a2b;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+}
+
+body.dark-theme .terms-card h2 {
+    color: white;
+}
+
+body.dark-theme .terms-card p {
+    color: #d1d5db;
+}
+
+body.dark-theme .terms-footer h2 {
+    color: white;
+}
+
+body.dark-theme .terms-footer p {
+    color: #d1d5db;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    .terms-page {
+        padding: 60px 20px;
+    }
+
+    .terms-hero h1 {
+        font-size: 34px;
+    }
+
+    .terms-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .navbar {
+        padding: 0 20px;
+    }
+}
+
+/* =========================
+   DARK THEME
+========================= */
+
+.dark-theme body {
+    background: #080b18;
+    color: #ffffff;
+}
+
+.dark-theme .navbar {
+    background: #111522;
+    border-bottom-color: #2a3042;
+}
+
+.dark-theme .logo h2 {
+    color: #ffffff;
+}
+
+.dark-theme .nav-links a {
+    color: #ffffff;
+}
+
+.dark-theme .terms-hero h1 {
+    color: #ffffff;
+}
+
+.dark-theme .terms-hero p {
+    color: #d1d5db;
+}
+
+.dark-theme .terms-card {
+    background: #151a2b;
+    border-color: #2a3042;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.dark-theme .terms-card h2 {
+    color: #ffffff;
+}
+
+.dark-theme .terms-card p {
+    color: #d1d5db;
+}
+
+.dark-theme .terms-footer {
+    border-top-color: #2a3042;
+}
+
+.dark-theme .terms-footer h2 {
+    color: #ffffff;
+}
+
+.dark-theme .terms-footer p {
+    color: #d1d5db;
+}

@@ -1,0 +1,270 @@
+body{
+    background:#f6f8fc;
+    color:#222;
+}
+
+.about-page{
+    padding:140px 0 100px;
+}
+
+.about-hero{
+
+text-align:center;
+
+margin-bottom:70px;
+
+}
+
+.about-hero h1{
+
+font-size:48px;
+
+margin-bottom:20px;
+
+color:#111;
+
+}
+
+.about-hero p{
+
+max-width:850px;
+
+margin:auto;
+
+font-size:18px;
+
+line-height:1.8;
+
+ color:#555;
+
+}
+
+.about-grid{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
+
+gap:30px;
+
+margin-bottom:60px;
+
+}
+
+.about-card{
+
+background:white;
+
+padding:40px;
+
+border-radius:20px;
+
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.section-title{
+
+text-align:center;
+
+margin:70px 0 40px;
+
+}
+
+.features-grid{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+
+gap:25px;
+
+}
+
+.feature-box{
+
+background:white;
+
+padding:25px;
+
+border-radius:18px;
+
+text-align:center;
+
+box-shadow:0 8px 25px rgba(0,0,0,.08);
+
+}
+
+.tech-grid{
+
+display:flex;
+
+flex-wrap:wrap;
+
+justify-content:center;
+
+gap:15px;
+
+margin-top:40px;
+
+}
+
+.tech-grid span{
+
+padding:12px 20px;
+
+background:#6a5cff;
+
+color:white;
+
+border-radius:30px;
+
+font-weight:600;
+
+}
+
+.about-footer{
+
+    margin-top:100px;
+
+    text-align:center;
+
+    padding-bottom:80px;
+
+}
+
+.about-card h2,
+.about-card h3,
+.feature-box h3{
+
+color:#111;
+margin-bottom:20px;
+
+}
+
+.about-footer p{
+
+    margin-bottom:35px;
+
+    font-size:17px;
+
+    line-height:1.8;
+
+}
+
+.about-footer .primary-btn{
+
+    display:inline-block;
+
+    margin-top:15px;
+
+}
+
+.about-card p,
+.feature-box p{
+
+color:#555;
+
+line-height:1.7;
+
+}
+
+.feature-box{
+
+background:#fff;
+
+padding:30px;
+
+border-radius:18px;
+
+text-align:center;
+
+}
+
+.feature-box h3{
+
+margin-top:15px;
+
+margin-bottom:10px;
+
+}
+
+/* About Page Navbar Fix */
+
+.navbar {
+    background: #ffffff;
+    box-shadow: 0 2px 15px rgba(0,0,0,.08);
+}
+
+.navbar a {
+    color: #222 !important;
+    font-weight: 600;
+}
+
+.nav-links a {
+    color: #222 !important;
+    font-weight: 600;
+}
+
+.navbar .logo,
+.navbar .logo h2 {
+    color: #111 !important;
+}
+
+/* =========================
+   ABOUT PAGE DARK THEME
+========================= */
+
+body.dark-theme {
+    background: #080b18;
+    color: #ffffff;
+}
+
+body.dark-theme .about-hero h1 {
+    color: #ffffff;
+}
+
+body.dark-theme .about-hero p {
+    color: #d1d5db;
+}
+
+body.dark-theme .about-card {
+    background: #151a2b;
+    color: #ffffff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+body.dark-theme .about-card h2,
+body.dark-theme .about-card h3 {
+    color: #ffffff;
+}
+
+body.dark-theme .about-card p {
+    color: #d1d5db;
+}
+
+body.dark-theme .feature-box {
+    background: #151a2b;
+    color: #ffffff;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+}
+
+body.dark-theme .feature-box h3 {
+    color: #ffffff;
+}
+
+body.dark-theme .feature-box p {
+    color: #d1d5db;
+}
+
+body.dark-theme .section-title {
+    color: #ffffff;
+}
+
+body.dark-theme .about-footer {
+    color: #ffffff;
+}
+
+body.dark-theme .about-footer p {
+    color: #d1d5db;
+}

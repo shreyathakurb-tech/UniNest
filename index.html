@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>UniNest — Student Accommodation</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <span class="logo-icon">⬡</span>
+      <span class="logo-text">UniNest</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#listings" class="nav-link active">Browse</a></li>
+      <li><a href="#map-section" class="nav-link">Map View</a></li>
+      <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+      <li><a href="#testimonials" class="nav-link">Reviews</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <span class="theme-icon sun">☀️</span>
+        <span class="theme-icon moon">🌙</span>
+      </button>
+      <a href="#" class="btn btn-ghost">Sign In</a>
+      <a href="#" class="btn btn-primary">List Your Room</a>
+    </div>
+    <button class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <li><a href="#listings" class="nav-link active">Browse</a></li>
+<li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+<li><a href="#map-section" class="nav-link">Map View</a></li>
+<li><a href="#testimonials" class="nav-link">Reviews</a></li>
+  <a href="#" class="btn btn-primary" style="margin-top:1rem">List Your Room</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Trusted by 10,000+ students across India
+    </div>
+    <h1 class="hero-title">
+      Find Your Perfect<br/>
+      <span class="hero-accent">Student Home</span>
+    </h1>
+    <p class="hero-sub">Verified rooms near top universities. Safe, affordable, and student-friendly.</p>
+
+    <!-- Search Bar -->
+    <div class="search-box">
+      <div class="search-field">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Search university, city or area..." class="search-input" id="searchInput"/>
+      </div>
+      <div class="search-divider"></div>
+      <div class="search-field">
+        <span class="search-icon">💰</span>
+        <select class="search-select">
+          <option>Any Budget</option>
+          <option>Under ₹5,000</option>
+          <option>₹5,000 – ₹10,000</option>
+          <option>₹10,000 – ₹20,000</option>
+          <option>Above ₹20,000</option>
+        </select>
+      </div>
+      <div class="search-divider"></div>
+      <div class="search-field">
+        <span class="search-icon">🏠</span>
+        <select class="search-select">
+          <option>Room Type</option>
+          <option>Single Room</option>
+          <option>Shared Room</option>
+          <option>Studio</option>
+          <option>1BHK / 2BHK</option>
+        </select>
+      </div>
+      <button class="search-btn">Search Rooms</button>
+    </div>
+
+    <!-- Quick filters -->
+    <div class="quick-filters">
+      <span class="filter-label">Popular:</span>
+      <button class="qf-pill active">Near IIT Bombay</button>
+      <button class="qf-pill">Delhi University</button>
+      <button class="qf-pill">Pune University</button>
+      <button class="qf-pill">BITS Pilani</button>
+      <button class="qf-pill">VIT Vellore</button>
+    </div>
+  </div>
+
+  <!-- Hero Stats -->
+  <div class="hero-stats">
+    <div class="stat-item">
+      <span class="stat-num">5,200+</span>
+      <span class="stat-label">Active Listings</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-num">120+</span>
+      <span class="stat-label">Universities</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-num">98%</span>
+      <span class="stat-label">Verified Rooms</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-num">4.9★</span>
+      <span class="stat-label">Avg. Rating</span>
+    </div>
+  </div>
+</section>
+
+<!-- LISTINGS SECTION -->
+<section class="section" id="listings">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <p class="section-eyebrow">Handpicked For You</p>
+        <h2 class="section-title">Featured Listings</h2>
+      </div>
+      <div class="filter-row">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="single">Single</button>
+        <button class="filter-btn" data-filter="shared">Shared</button>
+        <button class="filter-btn" data-filter="studio">Studio</button>
+        <button class="filter-btn" data-filter="flat">Flat</button>
+      </div>
+    </div>
+
+    <div class="listings-grid" id="listingsGrid">
+
+      <div class="listing-card" data-type="studio">
+        <div class="card-img">
+          <div class="card-img-placeholder" style="background:linear-gradient(135deg,#1e3a5f,#2d6a9f)">
+            <span>🏢</span>
+          </div>
+          <button class="card-wish" aria-label="Save listing">♡</button>
+          <div class="card-badge verified">✓ Verified</div>
+          <div class="card-badge type-badge">Studio</div>
+        </div>
+        <div class="card-body">
+          <div class="card-location">📍 Powai, Mumbai</div>
+          <h3 class="card-title">Modern Studio near IIT Bombay</h3>
+          <div class="card-amenities">
+            <span class="amenity">📶 WiFi</span>
+            <span class="amenity">❄️ AC</span>
+            <span class="amenity">🚿 Attached Bath</span>
+          </div>
+          <div class="card-footer">
+            <div class="card-price">₹8,500<span>/mo</span></div>
+            <div class="card-rating">⭐ 4.8 <span class="rating-count">(42)</span></div>
+          </div>
+          <div class="card-distance">🎓 0.5 km from IIT Bombay</div>
+          <button class="card-btn">View Details</button>
+        </div>
+      </div>
+
+      <div class="listing-card" data-type="shared">
+        <div class="card-img">
+          <div class="card-img-placeholder" style="background:linear-gradient(135deg,#1a4731,#2d7a52)">
+            <span>🏠</span>
+          </div>
+          <button class="card-wish" aria-label="Save listing">♡</button>
+          <div class="card-badge verified">✓ Verified</div>
+          <div class="card-badge type-badge">Shared</div>
+        </div>
+        <div class="card-body">
+          <div class="card-location">📍 North Campus, Delhi</div>
+          <h3 class="card-title">Shared Room near Delhi University</h3>
+          <div class="card-amenities">
+            <span class="amenity">📶 WiFi</span>
+            <span class="amenity">🍳 Kitchen</span>
+            <span class="amenity">🧺 Laundry</span>
+          </div>
+          <div class="card-footer">
+            <div class="card-price">₹5,200<span>/mo</span></div>
+            <div class="card-rating">⭐ 4.5 <span class="rating-count">(31)</span></div>
+          </div>
+          <div class="card-distance">🎓 1.0 km from Delhi University</div>
+          <button class="card-btn">View Details</button>
+        </div>
+      </div>
+
+      <div class="listing-card" data-type="flat">
+        <div class="card-img">
+          <div class="card-img-placeholder" style="background:linear-gradient(135deg,#3d1f5e,#7b3fa0)">
+            <span>🏘️</span>
+          </div>
+          <button class="card-wish" aria-label="Save listing">♡</button>
+          <div class="card-badge verified">✓ Verified</div>
+          <div class="card-badge type-badge">1BHK</div>
+        </div>
+        <div class="card-body">
+          <div class="card-location">📍 Pilani, Rajasthan</div>
+          <h3 class="card-title">Spacious 1BHK near BITS Pilani</h3>
+          <div class="card-amenities">
+            <span class="amenity">📶 WiFi</span>
+            <span class="amenity">🅿️ Parking</span>
+            <span class="amenity">🔒 Security</span>
+          </div>
+          <div class="card-footer">
+            <div class="card-price">₹7,000<span>/mo</span></div>
+            <div class="card-rating">⭐ 4.7 <span class="rating-count">(58)</span></div>
+          </div>
+          <div class="card-distance">🎓 0.8 km from BITS Pilani</div>
+          <button class="card-btn">View Details</button>
+        </div>
+      </div>
+
+      <div class="listing-card" data-type="single">
+        <div class="card-img">
+          <div class="card-img-placeholder" style="background:linear-gradient(135deg,#5e3a1f,#a06930)">
+            <span>🛏️</span>
+          </div>
+          <button class="card-wish" aria-label="Save listing">♡</button>
+          <div class="card-badge new-badge">New</div>
+          <div class="card-badge type-badge">Single</div>
+        </div>
+        <div class="card-body">
+          <div class="card-location">📍 Katraj, Pune</div>
+          <h3 class="card-title">Cozy Single Room near Pune University</h3>
+          <div class="card-amenities">
+            <span class="amenity">📶 WiFi</span>
+            <span class="amenity">❄️ AC</span>
+            <span class="amenity">🍳 Kitchen</span>
+          </div>
+          <div class="card-footer">
+            <div class="card-price">₹6,500<span>/mo</span></div>
+            <div class="card-rating">⭐ 4.6 <span class="rating-count">(19)</span></div>
+          </div>
+          <div class="card-distance">🎓 1.2 km from Pune University</div>
+          <button class="card-btn">View Details</button>
+        </div>
+      </div>
+
+      <div class="listing-card" data-type="studio">
+        <div class="card-img">
+          <div class="card-img-placeholder" style="background:linear-gradient(135deg,#1f3d5e,#2a6e8c)">
+            <span>🏬</span>
+          </div>
+          <button class="card-wish" aria-label="Save listing">♡</button>
+          <div class="card-badge verified">✓ Verified</div>
+          <div class="card-badge type-badge">Studio</div>
+        </div>
+        <div class="card-body">
+          <div class="card-location">📍 Vellore, Tamil Nadu</div>
+          <h3 class="card-title">Premium Studio near VIT Vellore</h3>
+          <div class="card-amenities">
+            <span class="amenity">📶 WiFi</span>
+            <span class="amenity">❄️ AC</span>
+            <span class="amenity">🏋️ Gym</span>
+          </div>
+          <div class="card-footer">
+            <div class="card-price">₹9,000<span>/mo</span></div>
+            <div class="card-rating">⭐ 4.9 <span class="rating-count">(73)</span></div>
+          </div>
+          <div class="card-distance">🎓 0.3 km from VIT Vellore</div>
+          <button class="card-btn">View Details</button>
+        </div>
+      </div>
+
+      <div class="listing-card" data-type="shared">
+        <div class="card-img">
+          <div class="card-img-placeholder" style="background:linear-gradient(135deg,#3d3d1f,#8c7a2a)">
+            <span>🏠</span>
+          </div>
+          <button class="card-wish" aria-label="Save listing">♡</button>
+          <div class="card-badge verified">✓ Verified</div>
+          <div class="card-badge type-badge">Shared</div>
+        </div>
+        <div class="card-body">
+          <div class="card-location">📍 Koramangala, Bangalore</div>
+          <h3 class="card-title">Shared Flat near IISc Bangalore</h3>
+          <div class="card-amenities">
+            <span class="amenity">📶 WiFi</span>
+            <span class="amenity">🚲 Cycle Stand</span>
+            <span class="amenity">🔒 Security</span>
+          </div>
+          <div class="card-footer">
+            <div class="card-price">₹7,800<span>/mo</span></div>
+            <div class="card-rating">⭐ 4.6 <span class="rating-count">(44)</span></div>
+          </div>
+          <div class="card-distance">🎓 2.0 km from IISc Bangalore</div>
+          <button class="card-btn">View Details</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="load-more-wrap">
+      <button class="btn btn-outline">Load More Listings</button>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section section-alt" id="how-it-works">
+  <div class="container">
+    <div class="section-header centered">
+      <p class="section-eyebrow">Simple Process</p>
+      <h2 class="section-title">How UniNest Works</h2>
+      <p class="section-desc">Find and book your perfect student accommodation in 3 simple steps</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">01</div>
+        <div class="step-icon">🔍</div>
+        <h3 class="step-title">Search & Filter</h3>
+        <p class="step-desc">Enter your university name and set your budget. Use filters to find exactly what you need.</p>
+      </div>
+      <div class="step-connector">→</div>
+      <div class="step-card">
+        <div class="step-number">02</div>
+        <div class="step-icon">📞</div>
+        <h3 class="step-title">Connect & Visit</h3>
+        <p class="step-desc">Message the landlord directly, schedule a visit, and ask all your questions securely.</p>
+      </div>
+      <div class="step-connector">→</div>
+      <div class="step-card">
+        <div class="step-number">03</div>
+        <div class="step-icon">🏠</div>
+        <h3 class="step-title">Book & Move In</h3>
+        <p class="step-desc">Sign your digital agreement, pay securely online, and move into your new home!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAP SECTION -->
+<section class="section" id="map-section">
+  <div class="container">
+    <div class="map-layout">
+      <div class="map-info">
+        <p class="section-eyebrow">Explore Areas</p>
+        <h2 class="section-title">Find Rooms on Map</h2>
+        <p class="section-desc">Browse rooms visually on an interactive map. See distance from your university at a glance.</p>
+        <ul class="map-features">
+          <li>📍 Click any pin to see room details</li>
+          <li>🎓 University markers included</li>
+          <li>🚶 Walk/commute time shown</li>
+          <li>🔴 Color-coded by price range</li>
+        </ul>
+        <button class="btn btn-primary">Open Full Map</button>
+      </div>
+      <div class="map-placeholder">
+        <div class="map-mock">
+          <div class="map-grid"></div>
+          <div class="map-pin pin-1">📍<span class="pin-label">₹8,500</span></div>
+          <div class="map-pin pin-2">📍<span class="pin-label">₹5,200</span></div>
+          <div class="map-pin pin-3">📍<span class="pin-label">₹7,000</span></div>
+          <div class="map-pin pin-4">🎓<span class="pin-label">IIT Bombay</span></div>
+          <div class="map-overlay-text">Interactive Map — Leaflet.js</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section section-alt" id="testimonials">
+  <div class="container">
+    <div class="section-header centered">
+      <p class="section-eyebrow">Student Stories</p>
+      <h2 class="section-title">What Students Say</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="t-quote">"</div>
+        <p class="t-text">Found my perfect room near IIT Bombay within 2 days. The verification process gave me full confidence. Highly recommend UniNest!</p>
+        <div class="t-author">
+          <div class="t-avatar" style="background:#6366f1">AR</div>
+          <div>
+            <div class="t-name">Aryan Raj</div>
+            <div class="t-uni">IIT Bombay, 2nd Year</div>
+          </div>
+          <div class="t-stars">⭐⭐⭐⭐⭐</div>
+        </div>
+      </div>
+      <div class="testimonial-card featured-testimonial">
+        <div class="t-quote">"</div>
+        <p class="t-text">As an international student, finding accommodation was my biggest worry. UniNest made it so easy — verified listings, clear photos, and a simple booking process.</p>
+        <div class="t-author">
+          <div class="t-avatar" style="background:#10b981">SL</div>
+          <div>
+            <div class="t-name">Sarah Lin</div>
+            <div class="t-uni">Delhi University, Exchange Student</div>
+          </div>
+          <div class="t-stars">⭐⭐⭐⭐⭐</div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="t-quote">"</div>
+        <p class="t-text">The roommate finder feature helped me find a great flatmate. Saved money and made a new friend. The platform is clean and super easy to use!</p>
+        <div class="t-author">
+          <div class="t-avatar" style="background:#f59e0b">PK</div>
+          <div>
+            <div class="t-name">Priya Kapoor</div>
+            <div class="t-uni">BITS Pilani, 3rd Year</div>
+          </div>
+          <div class="t-stars">⭐⭐⭐⭐⭐</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA SECTION -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <div class="container">
+    <div class="cta-inner">
+      <h2 class="cta-title">Ready to Find Your<br/><span class="hero-accent">Perfect Room?</span></h2>
+      <p class="cta-sub">Join 10,000+ students who found their home through UniNest</p>
+      <div class="cta-btns">
+        <a href="#listings" class="btn btn-primary btn-lg">Browse Listings</a>
+        <a href="#" class="btn btn-outline btn-lg">List Your Property</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <span class="logo-icon">⬡</span>
+          <span class="logo-text">UniNest</span>
+        </div>
+        <p class="footer-tagline">Making student housing simple, safe, and affordable across India.</p>
+        <div class="social-links">
+          <a href="#" class="social-link">𝕏</a>
+          <a href="#" class="social-link">in</a>
+          <a href="#" class="social-link">ig</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Students</h4>
+        <ul class="footer-links">
+          <li><a href="#">Browse Rooms</a></li>
+          <li><a href="#">Map View</a></li>
+          <li><a href="#">Roommate Finder</a></li>
+          <li><a href="#">Student Guides</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Landlords</h4>
+        <ul class="footer-links">
+          <li><a href="#">List Property</a></li>
+          <li><a href="#">Manage Listings</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Landlord Guide</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Company</h4>
+        <ul class="footer-links">
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 UniNest. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- PROPERTY DETAIL MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div class="modal-img-placeholder">
+      <span>🏢</span>
+      <span class="modal-badge">✓ Verified</span>
+    </div>
+    <div class="modal-body">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title">Modern Studio near IIT Bombay</h2>
+          <div class="modal-location">📍 Powai, Mumbai — 0.5 km from IIT Bombay</div>
+        </div>
+        <div class="modal-price">₹8,500<span>/mo</span></div>
+      </div>
+      <div class="modal-amenities">
+        <span class="amenity">📶 WiFi</span>
+        <span class="amenity">❄️ AC</span>
+        <span class="amenity">🚿 Attached Bath</span>
+        <span class="amenity">🅿️ Parking</span>
+        <span class="amenity">🔒 24/7 Security</span>
+        <span class="amenity">🍳 Kitchen</span>
+      </div>
+      <p class="modal-desc">A fully furnished modern studio apartment ideal for students. Located just 0.5 km from IIT Bombay main gate. The room includes high-speed WiFi, air conditioning, and an attached bathroom. The building has 24/7 security and CCTV coverage.</p>
+      <div class="modal-actions">
+        <button class="btn btn-primary btn-lg">Book Now</button>
+        <button class="btn btn-outline btn-lg">Message Landlord</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
