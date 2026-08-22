@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
             [userId, propertyId]
         );
 
-        res.json({
+        res.json({ 
             success: true,
             message: "Property added to favourites."
         });

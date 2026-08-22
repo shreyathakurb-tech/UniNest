@@ -1,13 +1,13 @@
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
 const path = require("path");
 const chatRoute = require("./routes/chat");
 const roommateRoute =require("./routes/roommate");
 const favouriteRoutes = require("./routes/favourites");
-const express = require("express");
-const cors = require("cors");
-const { Pool } = require("pg");
+const pool = require("./db");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
 let allProperties = [];
 let latestProperties = [];
 let featuredProperties = [];
@@ -20,14 +20,6 @@ app.use(express.json());
 app.use("/api/chat", chatRoute);
 app.use("/api/roommate", roommateRoute);
 app.use("/favourites", favouriteRoutes);
-
-const pool = new Pool({
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    database: process.env.DB_NAME
-});
 
 app.get("/", (req, res) => {
     res.send("UniNest Backend Running");
@@ -699,7 +691,7 @@ app.post("/property-visits", async (req, res) => {
         res.status(500).json({
             message: "Unable to book visit"
         });
-    }
+    }9
 });
 
 const PORT = process.env.PORT || 5000;
