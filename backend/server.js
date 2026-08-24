@@ -25,13 +25,13 @@ app.get("/", (req, res) => {
     res.send("UniNest Backend Running");
 });
 
-pool.connect()
-.then(() => {
-    console.log("PostgreSQL Connected");
-})
-.catch(err => {
-    console.log(err);
-});
+pool.query("SELECT 1")
+    .then(() => {
+        console.log("PostgreSQL Connected");
+    })
+    .catch(err => {
+        console.error("PostgreSQL Connection Error:", err.message);
+    });
 
 app.post("/register", async (req, res) => {
 
@@ -224,14 +224,21 @@ app.post("/properties", async (req, res) => {
 });
 
 app.get("/properties", async (req, res) => {
-
-    const result =
-        await pool.query(
+    try {
+        const result = await pool.query(
             "SELECT * FROM properties ORDER BY id DESC"
         );
 
-    res.json(result.rows);
+        res.json(result.rows);
 
+    } catch (error) {
+        console.error("Error fetching properties:", error);
+
+        res.status(500).json({
+            message: "Failed to fetch properties",
+            error: error.message
+        });
+    }
 });
 
 app.get("/my-properties/:userId", async (req, res) => {
