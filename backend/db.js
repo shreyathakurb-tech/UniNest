@@ -8,16 +8,6 @@ console.log(
         : "DATABASE_URL NOT FOUND"
 );
 
-const { Pool } = require("pg");
-require("dotenv").config();
-
-console.log(
-    "DATABASE HOST:",
-    process.env.DATABASE_URL
-        ? new URL(process.env.DATABASE_URL).hostname
-        : "DATABASE_URL NOT FOUND"
-);
-
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: {
