@@ -19,7 +19,6 @@ router.post("/", async (req, res) => {
 } = req.body;
 
         const text = message.toLowerCase().trim();
-
         const greetings = [
             "hi",
             "hello",
