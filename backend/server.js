@@ -361,15 +361,13 @@ app.delete("/properties/:id", async (req, res) => {
             message: "Property Deleted Successfully"
         });
 
-    } catch(error){
+    } catch (error) {
+    console.error("PROPERTY INSERT ERROR:", error);
 
-        console.log(error);
-
-        res.status(500).json({
-            message: "Server Error"
-        });
-
-    }
+    res.status(500).json({
+        message: error.message
+    });
+}
 
 });
 
