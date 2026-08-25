@@ -25,14 +25,24 @@ app.get("/", (req, res) => {
     res.send("UniNest Backend Running");
 });
 
-pool.query("SELECT 1")
-    .then(() => {
-        console.log("PostgreSQL Connected");
-    })
-    .catch(err => {
-        console.error("PostgreSQL Connection Error:", err.message);
-    });
+async function testDatabase() {
+    try {
+        const result = await pool.query("SELECT NOW()");
 
+        console.log("=================================");
+        console.log("POSTGRESQL CONNECTED SUCCESSFULLY");
+        console.log("Database time:", result.rows[0].now);
+        console.log("=================================");
+    } catch (error) {
+        console.error("=================================");
+        console.error("POSTGRESQL CONNECTION FAILED");
+        console.error("Error code:", error.code);
+        console.error("Error message:", error.message);
+        console.error("=================================");
+    }
+}
+
+testDatabase();
 app.post("/register", async (req, res) => {
 
     try {
@@ -177,6 +187,25 @@ app.post("/properties", async (req, res) => {
             user_id
         } = req.body;
 
+        // Make sure user_id was provided
+        if (!user_id) {
+            return res.status(400).json({
+                message: "User ID is required"
+            });
+        }
+
+        // Make sure this user actually exists
+        const userResult = await pool.query(
+            "SELECT id FROM users WHERE id = $1",
+            [user_id]
+        );
+
+        if (userResult.rows.length === 0) {
+            return res.status(400).json({
+                message: "User does not exist. Please login again."
+            });
+        }
+
         const result = await pool.query(
             `INSERT INTO properties
             (
@@ -200,7 +229,7 @@ app.post("/properties", async (req, res) => {
                 room_type,
                 gender,
                 description,
-                image_url,
+                image_url || null,
                 JSON.stringify(image_urls || []),
                 user_id
             ]
@@ -213,7 +242,7 @@ app.post("/properties", async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error("Error adding property:", error);
 
         res.status(500).json({
             message: "Server Error"
@@ -222,7 +251,6 @@ app.post("/properties", async (req, res) => {
     }
 
 });
-
 app.get("/properties", async (req, res) => {
     try {
         const result = await pool.query(
@@ -696,7 +724,7 @@ app.post("/property-visits", async (req, res) => {
         res.status(500).json({
             message: "Unable to book visit"
         });
-    }9
+    }
 });
 
 const PORT = process.env.PORT || 5000;
