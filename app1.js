@@ -5,8 +5,7 @@
 /* =========================
    THEME TOGGLE
 ========================= */
-
-const API_URL = "http://localhost:5000";
+const API_URL = "https://uninest-oqx4.onrender.com";
 
 const themeToggle = document.getElementById("themeToggle");
 const html = document.documentElement;
@@ -146,7 +145,6 @@ if (scrollTopBtn) {
 const faqQuestions = document.querySelectorAll(".faq-question");
 
 faqQuestions.forEach(question => {
-
     question.addEventListener("click", () => {
 
         const item = question.parentElement;
@@ -535,11 +533,14 @@ function attachLoginHandler() {
                     "token",
                     data.token
                 );
+
+                localStorage.setItem("userId", data.user.id);
+
                 localStorage.setItem("userName", data.user.name);
 
                 localStorage.setItem("userEmail", data.user.email);
 
-                localStorage.setItem("userId", data.user.id);
+                
 
 showToast(data.message, "success");
 
@@ -847,30 +848,38 @@ const method = editingPropertyId
     : "POST";
 
 const response = await fetch(url, {
-
     method,
-
     headers: {
         "Content-Type": "application/json"
     },
-
     body: JSON.stringify(propertyData)
-
 });
 
-            const data =
-                await response.json();
+const data = await response.json();
 
-            showToast(
+if (!response.ok) {
+    throw new Error(data.message || "Failed to save property");
+}
+
+showToast(
     editingPropertyId
         ? "Property Updated Successfully"
         : "Property Added Successfully",
     "success"
 );
 
-            propertyForm.reset();
+propertyForm.reset();
+editingPropertyId = null;
 
-            propertyFormModal.classList.remove("active");
+const submitBtn = propertyForm.querySelector(
+    "button[type='submit']"
+);
+
+if (submitBtn) {
+    submitBtn.textContent = "Add Property";
+}
+
+propertyFormModal.classList.remove("active");
 
             loadLatestProperties();
             loadFeaturedProperties();
@@ -895,7 +904,19 @@ async function loadLatestProperties() {
             `${API_URL}/properties`
         );
 
-        const properties = await response.json();
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.message ||
+                data.error ||
+                "Failed to load properties"
+            );
+        }
+
+        const properties = Array.isArray(data)
+            ? data
+            : (data.properties || []);
 
         const container =
             document.getElementById("latestProperties");
@@ -1031,31 +1052,43 @@ style="${
 let favouriteIds = [];
 
 async function loadFavourites() {
-
     const userId = localStorage.getItem("userId");
 
-    if (!userId) return;
+    if (!userId) {
+        favouriteIds = [];
+        updateFavouriteBadge();
+        return;
+    }
 
     try {
-
-       const response = await fetch(
+        const response = await fetch(
     `${API_URL}/favourites/${userId}`
 );
 
-        const favourites = await response.json();
+        const data = await response.json();
 
-        favouriteIds = favourites.map(property => property.id);
+        console.log("Favourites response:", data);
+
+        if (!response.ok) {
+            throw new Error(data.error || "Failed to load favourites");
+        }
+
+        const favourites = Array.isArray(data)
+            ? data
+            : (data.favourites || []);
+
+        favouriteIds = favourites.map(
+            property => property.id
+        );
 
         updateFavouriteBadge();
 
-updateWishlistButtons();
+    } catch (error) {
+        console.error("Load favourites error:", error);
 
-    } catch (err) {
-
-        console.log(err);
-
+        favouriteIds = [];
+        updateFavouriteBadge();
     }
-
 }
 
 (async()=>{
@@ -1075,7 +1108,6 @@ let currentImageIndex = 0;
 let currentPropertyId = null;
 
 function getImageUrl(imagePath) {
-
     if (!imagePath) {
         return "";
     }
@@ -1088,10 +1120,18 @@ function getImageUrl(imagePath) {
         return imagePath;
     }
 
-    // Local frontend image
-    return imagePath.startsWith("/")
-        ? imagePath
-        : "/" + imagePath;
+    // Convert Windows backslashes to normal slashes
+    imagePath = imagePath.replace(/\\/g, "/");
+
+    // Handle old Windows paths
+    if (imagePath.includes("/images/")) {
+        imagePath = imagePath.split("/images/").pop();
+    }
+
+    // Remove leading slash
+    imagePath = imagePath.replace(/^\/+/, "");
+
+    return `${API_URL}/images/${encodeURIComponent(imagePath)}`;
 }
 
 function renderGallery() {
@@ -1793,22 +1833,32 @@ window.addEventListener("click",(e)=>{
 async function loadFeaturedProperties() {
 
     try {
+const response = await fetch(
+    `${API_URL}/featured-properties`
+);
 
-        const response = await fetch(
-            `${API_URL}/featured-properties`
-        );
+const data = await response.json();
 
-        const properties = await response.json();
+if (!response.ok) {
+    throw new Error(
+        data.message ||
+        data.error ||
+        "Failed to load featured properties"
+    );
+}
 
-        const featuredContainer =
-            document.getElementById("propertyContainer");
+const properties = Array.isArray(data)
+    ? data
+    : (data.properties || []);
 
-        if (!featuredContainer) return;
+const featuredContainer =
+    document.getElementById("propertyContainer");
 
-        featuredContainer.innerHTML = "";
+if (!featuredContainer) return;
 
-        properties.slice(0, 3).forEach(property => {
+featuredContainer.innerHTML = "";
 
+properties.slice(0, 3).forEach(property => {
             const card = `
 
 <div
@@ -2442,9 +2492,12 @@ function updateWishlistButtons(){
 =========================== */
 
 const subscribeBtn =
-document.getElementById("subscribeBtn");
+    document.getElementById("subscribeBtn");
 
-subscribeBtn.addEventListener("click",async()=>{
+if (subscribeBtn) {
+
+    subscribeBtn.addEventListener("click", async () => {
+
 
 const email=
 document.getElementById("subscriberEmail").value.trim();
@@ -2585,7 +2638,7 @@ if (footerWishlist) {
         document
             .getElementById("myFavouritesModal")
             .classList.add("active");
-            document.querySelectorAll("#closeFavourites").length
+            
 
     });
 
@@ -2745,15 +2798,19 @@ if (closeBookVisit && bookVisitModal) {
 
     });
 }
-window.addEventListener("click", (e) => {
+if (bookVisitModal) {
 
-    if (e.target === bookVisitModal) {
+    window.addEventListener("click", (e) => {
 
-        bookVisitModal.classList.remove("active");
+        if (e.target === bookVisitModal) {
 
-    }
+            bookVisitModal.classList.remove("active");
 
-});
+        }
+
+    });
+
+}
 
 // =========================================
 // CONFIRM BOOKING
@@ -2850,7 +2907,7 @@ if (confirmVisitBtn) {
             document.getElementById("visitorName").value = "";
             document.getElementById("visitorEmail").value = "";
 
-        } catch (error) {
+                } catch (error) {
 
             console.error("Booking error:", error);
 
@@ -2868,4 +2925,4 @@ if (confirmVisitBtn) {
 
     });
 
-}
+}}
