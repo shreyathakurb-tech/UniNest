@@ -1258,11 +1258,13 @@
 
                     <input type="text" id="propertyGender" placeholder="Gender" required>
 
-                   <textarea
+                   <input
+    type="file"
     id="propertyImage"
-    placeholder="Enter one image filename per line&#10;&#10;Example:&#10;boys_single_room.png&#10;boys_single_kitchen.png&#10;boys_single_bathroom.png"
-    style="padding:10px;height:100px;"
-    required></textarea>
+    accept="image/*"
+    multiple
+    required
+>
 
                     <textarea id="propertyDescription" placeholder="Description"
                         style="padding:10px;height:100px;"></textarea>
