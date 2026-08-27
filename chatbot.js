@@ -129,7 +129,7 @@ async function sendMessage() {
 
         const typing = showTyping();
 
-        const res = await fetch("http://localhost:5000/api/chat", {
+        const res = await fetch(`${API_URL}/api/chat`, {
 
             method: "POST",
 

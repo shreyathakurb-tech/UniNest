@@ -124,11 +124,7 @@ async function sendRoommateMessage() {
 
     try {
 
-        const response = await fetch(
-
-            "http://localhost:5000/api/roommate",
-
-            {
+        const response = await fetch(`${API_URL}/api/roommate`, {
 
                 method: "POST",
 

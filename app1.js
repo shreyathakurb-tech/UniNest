@@ -1858,7 +1858,7 @@ if (!featuredContainer) return;
 
 featuredContainer.innerHTML = "";
 
-properties.slice(0, 3).forEach(property => {
+properties.slice(0, 4).forEach(property => {
             const card = `
 
 <div
