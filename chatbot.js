@@ -116,35 +116,27 @@ function addMessage(text, type) {
 }
 
 async function sendMessage() {
-
     const message = input.value.trim();
 
     if (!message) return;
 
     addMessage(message, "user");
-
     input.value = "";
 
-    try {
+    let typing = null;
 
-        const typing = showTyping();
+    try {
+        typing = showTyping();
 
         const res = await fetch(`${API_URL}/api/chat`, {
-
             method: "POST",
-
             headers: {
                 "Content-Type": "application/json"
             },
-
-           body: JSON.stringify({
-
-    message,
-
-    userId: "guest"
-
-})
-
+            body: JSON.stringify({
+                message,
+                userId: "guest"
+            })
         });
 
         const data = await res.json();
@@ -155,12 +147,12 @@ async function sendMessage() {
 
     } catch (err) {
 
+        console.error("Chatbot error:", err);
+
         removeTyping(typing);
 
         addMessage("Unable to connect to AI server.", "bot");
-
     }
-
 }
 
 send.addEventListener("click", sendMessage);
