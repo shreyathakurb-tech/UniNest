@@ -342,12 +342,10 @@ ${userQuestion}
     }
 
     catch (err) {
-
-        console.error(err);
-
-        return "Sorry, I'm unable to answer right now.";
-
-    }
+    console.error("GROQ ERROR:", err);
+    console.error("MESSAGE:", err.message);
+    return "Sorry, I'm unable to answer right now.";
+}
 
 }
 
