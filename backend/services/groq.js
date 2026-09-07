@@ -349,7 +349,7 @@ ${userQuestion}
     console.error("Stack:", err.stack);
     console.error("================================");
 
-    return "Sorry, I'm unable to answer right now.";
+    return `Groq Error: ${err.message}`;
 }
 
 }
