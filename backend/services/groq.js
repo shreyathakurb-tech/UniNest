@@ -342,8 +342,13 @@ ${userQuestion}
     }
 
     catch (err) {
-    console.error("GROQ ERROR:", err);
-    console.error("MESSAGE:", err.message);
+    console.error("========== GROQ ERROR ==========");
+    console.error("Message:", err.message);
+    console.error("Status:", err.status);
+    console.error("Error:", err.error);
+    console.error("Stack:", err.stack);
+    console.error("================================");
+
     return "Sorry, I'm unable to answer right now.";
 }
 
