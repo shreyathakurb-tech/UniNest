@@ -223,12 +223,152 @@ function formatMarkdown(text) {
 }
 
 
+// --------------------
+// Convert AI Markdown to HTML
+// --------------------
+
+function renderRoommateMarkdown(text) {
+
+    // Escape HTML for safety
+    text = text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+    // Remove horizontal separator lines
+    text = text.replace(/^\s*---+\s*$/gm, "");
+
+    // Convert Markdown tables
+    const lines = text.split("\n");
+    let html = "";
+    let inTable = false;
+
+    for (let i = 0; i < lines.length; i++) {
+
+        let line = lines[i].trim();
+
+        // Skip empty lines
+        if (!line) {
+            if (inTable) {
+                html += "</table>";
+                inTable = false;
+            }
+            continue;
+        }
+
+        // Detect table
+        if (line.startsWith("|") && line.endsWith("|")) {
+
+            const cells = line
+                .split("|")
+                .slice(1, -1)
+                .map(cell => cell.trim());
+
+            // Markdown separator row
+            if (cells.every(cell => /^[-:]+$/.test(cell))) {
+                continue;
+            }
+
+            if (!inTable) {
+                html += `
+                    <table class="roommate-table">
+                        <tbody>
+                `;
+                inTable = true;
+
+                html += "<tr>";
+
+                cells.forEach(cell => {
+                    html += `<th>${formatInlineMarkdown(cell)}</th>`;
+                });
+
+                html += "</tr>";
+            } else {
+
+                html += "<tr>";
+
+                cells.forEach(cell => {
+                    html += `<td>${formatInlineMarkdown(cell)}</td>`;
+                });
+
+                html += "</tr>";
+            }
+
+            continue;
+        }
+
+        // Close table if normal text starts
+        if (inTable) {
+            html += "</tbody></table>";
+            inTable = false;
+        }
+
+        // Heading
+        if (line.startsWith("### ")) {
+            html += `<h3>${formatInlineMarkdown(line.substring(4))}</h3>`;
+            continue;
+        }
+
+        if (line.startsWith("## ")) {
+            html += `<h2>${formatInlineMarkdown(line.substring(3))}</h2>`;
+            continue;
+        }
+
+        // Bullet point
+        if (line.startsWith("- ")) {
+            html += `<div class="roommate-bullet">• ${formatInlineMarkdown(line.substring(2))}</div>`;
+            continue;
+        }
+
+        // Numbered list
+        if (/^\d+\.\s/.test(line)) {
+            html += `<div class="roommate-number">${formatInlineMarkdown(line)}</div>`;
+            continue;
+        }
+
+        // Normal paragraph
+        html += `<p>${formatInlineMarkdown(line)}</p>`;
+    }
+
+    if (inTable) {
+        html += "</tbody></table>";
+    }
+
+    return html;
+}
+
+
+// --------------------
+// Inline Markdown
+// --------------------
+
+function formatInlineMarkdown(text) {
+
+    // Bold
+    text = text.replace(
+        /\*\*(.*?)\*\*/g,
+        "<strong>$1</strong>"
+    );
+
+    // Italic
+    text = text.replace(
+        /\*(.*?)\*/g,
+        "<em>$1</em>"
+    );
+
+    return text;
+}
+
+
+// --------------------
+// Add Message
+// --------------------
+
 function addRoommateMessage(text, type) {
 
     if (!roommateChat) return;
 
     const div = document.createElement("div");
-
     div.className = type;
 
     const time = new Date().toLocaleTimeString([], {
@@ -238,22 +378,23 @@ function addRoommateMessage(text, type) {
 
     const formattedText =
         type === "bot"
-            ? formatRoommateResponse(text)
-            : formatMarkdown(
-                text
-                    .replace(/&/g, "&amp;")
-                    .replace(/</g, "&lt;")
-                    .replace(/>/g, "&gt;")
-            );
+            ? renderRoommateMarkdown(text)
+            : text;
 
     div.innerHTML = `
-        <div class="message-text">${formattedText}</div>
-        <div class="message-time">${time}</div>
+        <div class="message-text">
+            ${formattedText}
+        </div>
+
+        <div class="message-time">
+            ${time}
+        </div>
     `;
 
     roommateChat.appendChild(div);
 
-    roommateChat.scrollTop = roommateChat.scrollHeight;
+    roommateChat.scrollTop =
+        roommateChat.scrollHeight;
 }
 
 
