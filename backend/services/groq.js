@@ -316,7 +316,7 @@ ${userQuestion}
         const completion =
             await groq.chat.completions.create({
 
-                model: "llama3-8b-8192",
+                model: "openai/gpt-oss-20b",
 
                 messages,
 
