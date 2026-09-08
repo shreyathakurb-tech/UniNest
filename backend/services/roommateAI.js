@@ -45,7 +45,9 @@ function getSession(userId) {
 
 },
 
-conversationStage: "collecting"
+conversationStage: "collecting",
+questionsAsked: 0,
+questionLimit: 3
 
         });
 
@@ -300,98 +302,50 @@ function getMissingFields(profile) {
 
     const questions = [];
 
-    if (!profile.university) {
-
-        questions.push({
-            field: "University",
-            question: "Which university do you attend?"
-        });
-
-    }
-
-    if (!profile.location) {
-
-        questions.push({
-            field: "Location",
-            question: "Which location are you looking for accommodation in?"
-        });
-
-    }
-
-    if (!profile.budget) {
-
-        questions.push({
-            field: "Budget",
-            question: "What's your monthly budget?"
-        });
-
-    }
+    // Most important roommate compatibility questions
 
     if (!profile.personality) {
-
         questions.push({
             field: "Personality",
-            question: "Would you describe yourself as an introvert or extrovert?"
+            question: "Would you describe yourself as introvert, extrovert, or ambivert?"
         });
-
-    }
-
-    if (!profile.studySchedule) {
-
-        questions.push({
-            field: "Study Schedule",
-            question: "What's your study schedule like?"
-        });
-
     }
 
     if (!profile.sleepSchedule) {
-
         questions.push({
             field: "Sleep Schedule",
-            question: "When do you usually sleep?"
+            question: "What's your usual sleep schedule? Early sleeper or night owl?"
         });
-
     }
 
     if (!profile.cleanliness) {
-
         questions.push({
             field: "Cleanliness",
-            question: "How important is cleanliness to you?"
+            question: "How important is cleanliness to you? Clean, moderate, or relaxed?"
         });
-
     }
 
     if (!profile.foodPreference) {
-
         questions.push({
             field: "Food Preference",
-            question: "Do you prefer vegetarian or non-vegetarian food?"
+            question: "Do you have a food preference such as vegetarian, non-vegetarian, or no preference?"
         });
-
     }
 
     if (!profile.smoking) {
-
         questions.push({
             field: "Smoking",
-            question: "Do you smoke?"
+            question: "Do you prefer a roommate who does not smoke?"
         });
-
     }
 
     if (!profile.drinking) {
-
         questions.push({
             field: "Drinking",
-            question: "Do you drink occasionally?"
+            question: "Do you prefer a roommate who does not drink?"
         });
-
     }
-
     return questions;
-
 }
 
 async function askRoommateAI(userId, message) {
@@ -399,6 +353,26 @@ async function askRoommateAI(userId, message) {
     try {
 
         const session = getSession(userId);
+
+        // Allow the user to choose how many questions they want
+const questionLimitMatch = message.match(
+    /\b(?:only|just|ask me|give me)\s*(\d+)\s*(?:questions?|ques(?:tions?)?)\b/i
+);
+
+if (questionLimitMatch) {
+    const requestedLimit = parseInt(questionLimitMatch[1], 10);
+
+    if (requestedLimit >= 1 && requestedLimit <= 3) {
+        session.questionLimit = requestedLimit;
+    }
+}
+
+// Allow the user to stop answering questions
+const stopRequest = /\b(stop|no more questions|don't ask more|do not ask more|that's enough|thats enough|just recommend|give me the match|recommend now)\b/i.test(message);
+
+if (stopRequest) {
+    session.conversationStage = "recommendation";
+}
 
         // Update profile from current message
         updateProfile(session.profile, message);
@@ -422,17 +396,34 @@ async function askRoommateAI(userId, message) {
         // Find missing information
         const missing = getMissingFields(session.profile);
 
-        if (missing.length === 0) {
+        const compatibilityFields = [
+    session.profile.personality,
+    session.profile.studySchedule,
+    session.profile.sleepSchedule,
+    session.profile.cleanliness,
+    session.profile.foodPreference,
+    session.profile.smoking,
+    session.profile.drinking
+];
 
+const answeredFields = compatibilityFields.filter(
+    value => value !== null && value !== ""
+).length;
+
+        // ===================================
+// Decide conversation stage
+// ===================================
+
+if (
+    answeredFields >= 3 ||
+    missing.length === 0 ||
+    session.questionsAsked >= session.questionLimit ||
+    session.conversationStage === "recommendation"
+) {
     session.conversationStage = "recommendation";
-
-}
-else {
-
+} else {
     session.conversationStage = "collecting";
-
 }
-
         // Build user profile
         const profileSummary = `
 
@@ -504,31 +495,24 @@ RULES
 
 If stage is collecting
 
-• Ask ONLY missing questions.
-
-• Never ask answered questions.
-
-• Ask maximum 3 questions.
+• Ask ONLY missing roommate compatibility questions.
+• NEVER ask for university, budget, location, or accommodation details.
+• Never ask a question that the user has already answered.
+• Ask no more than the remaining question limit.
+• The user does NOT have to answer every question.
+• If the user provides only 1, 2, or 3 answers, use those answers.
+• If the user asks to stop, immediately move to recommendation.
+• If the user says "ask only 2 questions", ask only 2 questions.
+• If the user says "ask only 3 questions", ask only 3 questions.
 
 If stage is recommendation
 
 • Do NOT ask more questions.
-
-• Summarize the user's profile.
-
-• Recommend the ideal roommate.
-
-• Explain WHY.
-
-• Give roommate tips.
-
-If user asks follow-up questions
-
-Answer using remembered profile.
-
-Never forget previous conversation.
-
-Be friendly.
+• Use the information already provided.
+• Give the best roommate recommendation possible.
+• Clearly mention that the recommendation is based on the information provided.
+• Explain why the roommate is compatible.
+• Give useful roommate tips.
 
 `;
 
@@ -548,7 +532,16 @@ content:`
 
 Missing Questions
 
-${missing.slice(0,3).map(x=>"- "+x.question).join("\n")}
+${missing
+    .slice(
+        0,
+        Math.max(
+            0,
+            session.questionLimit - session.questionsAsked
+        )
+    )
+    .map(x => "- " + x.question)
+    .join("\n")}
 
 Current User Message
 
@@ -573,6 +566,18 @@ ${message}
         });
 
         const reply = completion.choices[0].message.content;
+
+        // ===================================
+// Count questions asked
+// ===================================
+
+const questionCount = (reply.match(/\?/g) || []).length;
+
+session.questionsAsked += questionCount;
+
+if (session.questionsAsked >= session.questionLimit) {
+    session.conversationStage = "recommendation";
+}
 
         session.history.push({
 
@@ -605,6 +610,4 @@ return finalReply;
 
 }
 
-module.exports = {
-    askRoommateAI
-};
+module.exports = askRoommateAI;
