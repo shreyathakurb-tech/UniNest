@@ -2,7 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 
-const { askRoommateAI } = require("../services/roommateAI");
+const askRoommateAI = require("../services/roommateAI");
 
 router.post("/", async (req, res) => {
 
