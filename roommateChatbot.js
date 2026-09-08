@@ -75,6 +75,154 @@ if (maximizeRoommateBtn && roommateChatbot) {
 // Add Message
 // --------------------
 
+function formatRoommateResponse(text) {
+
+    // Escape HTML first for safety
+    text = text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+    const lines = text.split("\n");
+    let html = "";
+    let i = 0;
+
+    while (i < lines.length) {
+
+        let line = lines[i].trim();
+
+        // Empty line
+        if (!line) {
+            i++;
+            continue;
+        }
+
+        // Markdown table
+        if (
+            line.startsWith("|") &&
+            i + 1 < lines.length &&
+            /^\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)+\|?$/.test(lines[i + 1].trim())
+        ) {
+
+            const headers = line
+                .split("|")
+                .slice(1, -1)
+                .map(cell => cell.trim());
+
+            i += 2;
+
+            html += `<table class="roommate-table"><thead><tr>`;
+
+            headers.forEach(header => {
+                html += `<th>${formatMarkdown(header)}</th>`;
+            });
+
+            html += `</tr></thead><tbody>`;
+
+            while (
+                i < lines.length &&
+                lines[i].trim().startsWith("|")
+            ) {
+
+                const cells = lines[i]
+                    .split("|")
+                    .slice(1, -1)
+                    .map(cell => cell.trim());
+
+                html += `<tr>`;
+
+                cells.forEach(cell => {
+                    html += `<td>${formatMarkdown(cell)}</td>`;
+                });
+
+                html += `</tr>`;
+
+                i++;
+            }
+
+            html += `</tbody></table>`;
+
+            continue;
+        }
+
+        // ### Heading
+        if (line.startsWith("### ")) {
+
+            html += `<h3>${formatMarkdown(line.substring(4))}</h3>`;
+
+            i++;
+            continue;
+        }
+
+        // ## Heading
+        if (line.startsWith("## ")) {
+
+            html += `<h2>${formatMarkdown(line.substring(3))}</h2>`;
+
+            i++;
+            continue;
+        }
+
+        // # Heading
+        if (line.startsWith("# ")) {
+
+            html += `<h1>${formatMarkdown(line.substring(2))}</h1>`;
+
+            i++;
+            continue;
+        }
+
+        // Bullet list
+        if (line.startsWith("- ") || line.startsWith("* ")) {
+
+            html += `<ul>`;
+
+            while (
+                i < lines.length &&
+                (lines[i].trim().startsWith("- ") ||
+                 lines[i].trim().startsWith("* "))
+            ) {
+
+                const item = lines[i].trim().substring(2);
+
+                html += `<li>${formatMarkdown(item)}</li>`;
+
+                i++;
+            }
+
+            html += `</ul>`;
+
+            continue;
+        }
+
+        // Normal paragraph
+        html += `<p>${formatMarkdown(line)}</p>`;
+
+        i++;
+    }
+
+    return html;
+}
+
+
+function formatMarkdown(text) {
+
+    // Bold
+    text = text.replace(
+        /\*\*(.*?)\*\*/g,
+        "<strong>$1</strong>"
+    );
+
+    // Italic
+    text = text.replace(
+        /\*(.*?)\*/g,
+        "<em>$1</em>"
+    );
+
+    return text;
+}
+
+
 function addRoommateMessage(text, type) {
 
     if (!roommateChat) return;
@@ -84,25 +232,28 @@ function addRoommateMessage(text, type) {
     div.className = type;
 
     const time = new Date().toLocaleTimeString([], {
-
         hour: "2-digit",
-
         minute: "2-digit"
-
     });
 
+    const formattedText =
+        type === "bot"
+            ? formatRoommateResponse(text)
+            : formatMarkdown(
+                text
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+            );
+
     div.innerHTML = `
-
-        <div class="message-text">${text}</div>
-
+        <div class="message-text">${formattedText}</div>
         <div class="message-time">${time}</div>
-
     `;
 
     roommateChat.appendChild(div);
 
     roommateChat.scrollTop = roommateChat.scrollHeight;
-
 }
 
 

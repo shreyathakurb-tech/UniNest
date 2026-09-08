@@ -82,3 +82,61 @@
     margin: 2px 0;
     line-height: 1.4;
 }
+
+/* Roommate AI response formatting */
+
+.message-text h1,
+.message-text h2,
+.message-text h3 {
+    margin: 8px 0;
+}
+
+.message-text p {
+    margin: 6px 0;
+    line-height: 1.4;
+}
+
+.message-text ul {
+    margin: 6px 0;
+    padding-left: 20px;
+}
+
+.message-text li {
+    margin: 3px 0;
+    line-height: 1.4;
+}
+
+/* AI response table */
+
+.roommate-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    font-size: 13px;
+}
+
+.roommate-table th,
+.roommate-table td {
+    border: 1px solid #ddd;
+    padding: 7px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.roommate-table th {
+    font-weight: 600;
+}
+
+.roommate-table td strong,
+.roommate-table th strong {
+    font-weight: 600;
+}
+
+.message-text strong {
+    font-weight: 700;
+}
+
+.message-text br + br {
+    display: block;
+    margin-bottom: 6px;
+}
