@@ -65,3 +65,20 @@
     bottom:auto;
 
 }
+
+/* Compact spacing for Roommate AI messages */
+.chat-message p {
+    margin: 4px 0;
+    line-height: 1.4;
+}
+
+.chat-message ul,
+.chat-message ol {
+    margin: 4px 0;
+    padding-left: 20px;
+}
+
+.chat-message li {
+    margin: 2px 0;
+    line-height: 1.4;
+}

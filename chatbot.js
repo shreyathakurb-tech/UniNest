@@ -91,10 +91,19 @@ function addMessage(text, type) {
         minute: "2-digit"
     });
 
-    div.innerHTML = `
-        <div class="message-text">${text}</div>
-        <div class="message-time">${time}</div>
-    `;
+    let formattedText = text;
+
+if (type === "bot") {
+    formattedText = text
+        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+        .replace(/\n\n/g, "<br><br>")
+        .replace(/\n/g, "<br>");
+}
+
+div.innerHTML = `
+    <div class="message-text">${formattedText}</div>
+    <div class="message-time">${time}</div>
+`;
 
     chat.appendChild(div);
 
