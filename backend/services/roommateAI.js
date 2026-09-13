@@ -1,13 +1,15 @@
 const Groq = require("groq-sdk");
+const pool = require("../db");
+
 require("dotenv").config();
 
 const groq = new Groq({
     apiKey: process.env.GROQ_API_KEY
 });
 
-// ===================================
+// =====================================
 // Conversation Memory
-// ===================================
+// =====================================
 
 const sessions = new Map();
 
@@ -21,33 +23,25 @@ function getSession(userId) {
 
             profile: {
 
-    university: null,
+                university: null,
+                location: null,
+                budget: null,
+                personality: null,
+                studySchedule: null,
+                sleepSchedule: null,
+                cleanliness: null,
+                foodPreference: null,
+                smoking: null,
+                drinking: null,
+                hobbies: null
 
-    location: null,
+            },
 
-    budget: null,
+            conversationStage: "collecting",
 
-    personality: null,
+            questionsAsked: 0,
 
-    studySchedule: null,
-
-    sleepSchedule: null,
-
-    cleanliness: null,
-
-    foodPreference: null,
-
-    smoking: null,
-
-    drinking: null,
-
-    hobbies: null
-
-},
-
-conversationStage: "collecting",
-questionsAsked: 0,
-questionLimit: 3
+            questionLimit: 3
 
         });
 
@@ -57,6 +51,10 @@ questionLimit: 3
 
 }
 
+// =====================================
+// Update User Profile
+// =====================================
+
 function updateProfile(profile, message) {
 
     const text = message.toLowerCase().trim();
@@ -65,11 +63,13 @@ function updateProfile(profile, message) {
     // Budget
     // -------------------------
 
-    const budgetMatch = text.match(/(?:₹|rs\.?|rupees?)?\s*(\d{3,6})/i);
+    const budgetMatch =
+        text.match(/(?:₹|rs\.?|rupees?)?\s*(\d{3,6})/i);
 
     if (budgetMatch) {
 
-        profile.budget = budgetMatch[1];
+        profile.budget =
+            Number(budgetMatch[1]);
 
     }
 
@@ -93,18 +93,16 @@ function updateProfile(profile, message) {
     if (text.includes("vegetarian"))
         profile.foodPreference = "Vegetarian";
 
-    if (text.includes("vegan"))
-        profile.foodPreference = "Vegan";
-
     if (
         text.includes("non veg") ||
         text.includes("non-veg") ||
         text.includes("non vegetarian")
     ) {
-
         profile.foodPreference = "Non-Vegetarian";
-
     }
+
+    if (text.includes("vegan"))
+        profile.foodPreference = "Vegan";
 
     // -------------------------
     // Smoking
@@ -113,20 +111,17 @@ function updateProfile(profile, message) {
     if (
         text.includes("don't smoke") ||
         text.includes("do not smoke") ||
-        text.includes("non smoker")
+        text.includes("non smoker") ||
+        text.includes("non-smoker")
     ) {
-
         profile.smoking = "No";
-
     }
 
     if (
-        text.includes("smoker") ||
-        text.includes("i smoke")
+        text.includes("i smoke") ||
+        text.includes("smoker")
     ) {
-
         profile.smoking = "Yes";
-
     }
 
     // -------------------------
@@ -135,20 +130,17 @@ function updateProfile(profile, message) {
 
     if (
         text.includes("don't drink") ||
-        text.includes("do not drink")
+        text.includes("do not drink") ||
+        text.includes("non drinker")
     ) {
-
         profile.drinking = "No";
-
     }
 
     if (
-        text.includes("drink occasionally") ||
-        text.includes("i drink")
+        text.includes("i drink") ||
+        text.includes("drink occasionally")
     ) {
-
         profile.drinking = "Yes";
-
     }
 
     // -------------------------
@@ -159,16 +151,18 @@ function updateProfile(profile, message) {
         text.includes("very clean") ||
         text.includes("clean person")
     ) {
-
         profile.cleanliness = "Very Clean";
-
     }
+    else if (text.includes("clean")) {
 
-    if (text.includes("clean"))
         profile.cleanliness = "Clean";
 
-    if (text.includes("messy"))
+    }
+    else if (text.includes("messy")) {
+
         profile.cleanliness = "Messy";
+
+    }
 
     // -------------------------
     // Study Schedule
@@ -176,20 +170,18 @@ function updateProfile(profile, message) {
 
     if (
         text.includes("study at night") ||
-        text.includes("night study")
+        text.includes("night study") ||
+        text.includes("study during night")
     ) {
-
         profile.studySchedule = "Night";
-
     }
 
     if (
         text.includes("study in morning") ||
-        text.includes("morning study")
+        text.includes("morning study") ||
+        text.includes("study early")
     ) {
-
         profile.studySchedule = "Morning";
-
     }
 
     // -------------------------
@@ -198,21 +190,54 @@ function updateProfile(profile, message) {
 
     if (
         text.includes("sleep early") ||
-        text.includes("10 pm") ||
-        text.includes("11 pm")
+        text.includes("early sleeper") ||
+        text.includes("sleep at 10") ||
+        text.includes("sleep at 11")
     ) {
-
         profile.sleepSchedule = "Early";
-
     }
 
     if (
         text.includes("sleep late") ||
-        text.includes("2 am") ||
-        text.includes("3 am")
+        text.includes("night owl") ||
+        text.includes("sleep at 2") ||
+        text.includes("sleep at 3")
     ) {
-
         profile.sleepSchedule = "Late";
+    }
+
+    // -------------------------
+    // Location
+    // -------------------------
+
+    const locations = [
+        "powai",
+        "andheri",
+        "thane",
+        "bandra",
+        "kurla",
+        "dadar",
+        "borivali",
+        "vile parle",
+        "chembur",
+        "ghatkopar",
+        "mulund",
+        "mumbai",
+        "delhi",
+        "bangalore",
+        "pune",
+        "hyderabad"
+    ];
+
+    for (const location of locations) {
+
+        if (text.includes(location)) {
+
+            profile.location = location;
+
+            break;
+
+        }
 
     }
 
@@ -226,8 +251,6 @@ function updateProfile(profile, message) {
 
         /student at (.+)/i,
 
-        /from (.+ university)/i,
-
         /my university is (.+)/i
 
     ];
@@ -238,7 +261,10 @@ function updateProfile(profile, message) {
 
         if (match) {
 
-            profile.university = match[1].trim();
+            profile.university =
+                match[1]
+                    .trim()
+                    .replace(/[.!?]+$/, "");
 
             break;
 
@@ -246,138 +272,374 @@ function updateProfile(profile, message) {
 
     }
 
-    // -------------------------
-    // Location
-    // -------------------------
-
-    const locations = [
-
-        "powai",
-
-        "andheri",
-
-        "thane",
-
-        "bandra",
-
-        "kurla",
-
-        "dadar",
-
-        "borivali",
-
-        "vile parle",
-
-        "chembur",
-
-        "ghatkopar",
-
-        "mulund",
-
-        "mumbai",
-
-        "delhi",
-
-        "bangalore",
-
-        "pune",
-
-        "hyderabad"
-
-    ];
-
-    locations.forEach(location => {
-
-        if (text.includes(location)) {
-
-            profile.location = location;
-
-        }
-
-    });
-
 }
+
+// =====================================
+// Missing Questions
+// =====================================
 
 function getMissingFields(profile) {
 
     const questions = [];
 
-    // Most important roommate compatibility questions
-
     if (!profile.personality) {
+
         questions.push({
             field: "Personality",
-            question: "Would you describe yourself as introvert, extrovert, or ambivert?"
+            question:
+                "Would you describe yourself as introvert, extrovert, or ambivert?"
         });
+
     }
 
     if (!profile.sleepSchedule) {
+
         questions.push({
             field: "Sleep Schedule",
-            question: "What's your usual sleep schedule? Early sleeper or night owl?"
+            question:
+                "What's your usual sleep schedule? Early sleeper or night owl?"
         });
+
     }
 
     if (!profile.cleanliness) {
+
         questions.push({
             field: "Cleanliness",
-            question: "How important is cleanliness to you? Clean, moderate, or relaxed?"
+            question:
+                "How important is cleanliness to you? Clean, moderate, or relaxed?"
         });
+
     }
 
     if (!profile.foodPreference) {
+
         questions.push({
             field: "Food Preference",
-            question: "Do you have a food preference such as vegetarian, non-vegetarian, or no preference?"
+            question:
+                "Do you have a food preference such as vegetarian, non-vegetarian, or no preference?"
         });
+
     }
 
     if (!profile.smoking) {
+
         questions.push({
             field: "Smoking",
-            question: "Do you prefer a roommate who does not smoke?"
+            question:
+                "Do you prefer a roommate who does not smoke?"
         });
+
     }
 
     if (!profile.drinking) {
+
         questions.push({
             field: "Drinking",
-            question: "Do you prefer a roommate who does not drink?"
+            question:
+                "Do you prefer a roommate who does not drink?"
         });
+
     }
+
     return questions;
+
 }
 
-async function askRoommateAI(userId, message) {
+// =====================================
+// Find Roommate Candidates
+// =====================================
+
+async function findRoommates(profile, currentUserId) {
+
+    let query = `
+        SELECT
+            u.id,
+            u.name,
+            u.email,
+            u.phone,
+
+            rp.preferred_gender,
+            rp.study_time,
+            rp.sleep_time,
+            rp.budget,
+            rp.preferred_location,
+            rp.smoking_preference,
+            rp.food_preference
+
+        FROM users u
+
+        INNER JOIN roommate_preferences rp
+            ON u.id = rp.user_id
+
+        WHERE 1 = 1
+    `;
+
+    const values = [];
+
+    // Don't recommend the logged-in user
+    if (
+        currentUserId &&
+        currentUserId !== "guest" &&
+        !isNaN(Number(currentUserId))
+    ) {
+
+        values.push(Number(currentUserId));
+
+        query += `
+            AND u.id <> $${values.length}
+        `;
+
+    }
+
+    // -------------------------
+    // Gender
+    // -------------------------
+
+    if (profile.preferredGender) {
+
+        values.push(
+            profile.preferredGender.toLowerCase()
+        );
+
+        query += `
+            AND LOWER(COALESCE(rp.preferred_gender, ''))
+            = $${values.length}
+        `;
+
+    }
+
+    // -------------------------
+    // Location
+    // -------------------------
+
+    if (profile.location) {
+
+        values.push(
+            `%${profile.location.toLowerCase()}%`
+        );
+
+        query += `
+            AND LOWER(COALESCE(rp.preferred_location, ''))
+            LIKE $${values.length}
+        `;
+
+    }
+
+    // -------------------------
+    // Budget
+    // -------------------------
+
+    if (profile.budget) {
+
+        values.push(Number(profile.budget));
+
+        query += `
+            AND (
+                rp.budget IS NULL
+                OR rp.budget <= $${values.length}
+            )
+        `;
+
+    }
+
+    query += `
+        ORDER BY u.name ASC
+        LIMIT 10
+    `;
+
+    const result = await pool.query(
+        query,
+        values
+    );
+
+    return result.rows;
+
+}
+
+// =====================================
+// Calculate Compatibility
+// =====================================
+
+function calculateMatch(profile, roommate) {
+
+    let score = 0;
+
+    let total = 0;
+
+    // Study schedule
+    if (profile.studySchedule) {
+
+        total++;
+
+        if (
+            roommate.study_time &&
+            roommate.study_time.toLowerCase()
+                === profile.studySchedule.toLowerCase()
+        ) {
+            score++;
+        }
+
+    }
+
+    // Sleep schedule
+    if (profile.sleepSchedule) {
+
+        total++;
+
+        if (
+            roommate.sleep_time &&
+            roommate.sleep_time.toLowerCase()
+                === profile.sleepSchedule.toLowerCase()
+        ) {
+            score++;
+        }
+
+    }
+
+    // Location
+    if (profile.location) {
+
+        total++;
+
+        if (
+            roommate.preferred_location &&
+            roommate.preferred_location
+                .toLowerCase()
+                .includes(profile.location.toLowerCase())
+        ) {
+            score++;
+        }
+
+    }
+
+    // Budget
+    if (profile.budget) {
+
+        total++;
+
+        if (
+            roommate.budget &&
+            Number(roommate.budget)
+                <= Number(profile.budget)
+        ) {
+            score++;
+        }
+
+    }
+
+    // Food
+    if (profile.foodPreference) {
+
+        total++;
+
+        if (
+            roommate.food_preference &&
+            roommate.food_preference
+                .toLowerCase()
+                === profile.foodPreference.toLowerCase()
+        ) {
+            score++;
+        }
+
+    }
+
+    // Smoking
+    if (profile.smoking) {
+
+        total++;
+
+        if (
+            roommate.smoking_preference &&
+            roommate.smoking_preference
+                .toLowerCase()
+                === profile.smoking.toLowerCase()
+        ) {
+            score++;
+        }
+
+    }
+
+    if (total === 0)
+        return 0;
+
+    return Math.round(
+        (score / total) * 100
+    );
+
+}
+
+// =====================================
+// Main AI Function
+// =====================================
+
+async function askRoommateAI(
+    userId,
+    message
+) {
 
     try {
 
-        const session = getSession(userId);
+        const session =
+            getSession(userId);
 
-        // Allow the user to choose how many questions they want
-const questionLimitMatch = message.match(
-    /\b(?:only|just|ask me|give me)\s*(\d+)\s*(?:questions?|ques(?:tions?)?)\b/i
-);
+        // ===================================
+        // Question Limit
+        // ===================================
 
-if (questionLimitMatch) {
-    const requestedLimit = parseInt(questionLimitMatch[1], 10);
+        const questionLimitMatch =
+            message.match(
+                /\b(?:only|just|ask me|give me)\s*(\d+)\s*(?:questions?|ques(?:tions?)?)\b/i
+            );
 
-    if (requestedLimit >= 1 && requestedLimit <= 3) {
-        session.questionLimit = requestedLimit;
-    }
-}
+        if (questionLimitMatch) {
 
-// Allow the user to stop answering questions
-const stopRequest = /\b(stop|no more questions|don't ask more|do not ask more|that's enough|thats enough|just recommend|give me the match|recommend now)\b/i.test(message);
+            const requestedLimit =
+                parseInt(
+                    questionLimitMatch[1],
+                    10
+                );
 
-if (stopRequest) {
-    session.conversationStage = "recommendation";
-}
+            if (
+                requestedLimit >= 1 &&
+                requestedLimit <= 3
+            ) {
 
-        // Update profile from current message
-        updateProfile(session.profile, message);
+                session.questionLimit =
+                    requestedLimit;
 
-        // Save current user message
+            }
+
+        }
+
+        // ===================================
+        // Stop Asking Questions
+        // ===================================
+
+        const stopRequest =
+            /\b(stop|no more questions|don't ask more|do not ask more|that's enough|thats enough|just recommend|give me the match|recommend now)\b/i
+                .test(message);
+
+        if (stopRequest) {
+
+            session.conversationStage =
+                "recommendation";
+
+        }
+
+        // ===================================
+        // Update Profile
+        // ===================================
+
+        updateProfile(
+            session.profile,
+            message
+        );
+
+        // ===================================
+        // Save User Message
+        // ===================================
+
         session.history.push({
 
             role: "user",
@@ -386,198 +648,386 @@ if (stopRequest) {
 
         });
 
-        // Keep only recent history
         if (session.history.length > 20) {
 
-            session.history = session.history.slice(-20);
+            session.history =
+                session.history.slice(-20);
 
         }
 
-        // Find missing information
-        const missing = getMissingFields(session.profile);
+        // ===================================
+        // Missing Fields
+        // ===================================
 
-        const compatibilityFields = [
-    session.profile.personality,
-    session.profile.studySchedule,
-    session.profile.sleepSchedule,
-    session.profile.cleanliness,
-    session.profile.foodPreference,
-    session.profile.smoking,
-    session.profile.drinking
-];
-
-const answeredFields = compatibilityFields.filter(
-    value => value !== null && value !== ""
-).length;
+        const missing =
+            getMissingFields(
+                session.profile
+            );
 
         // ===================================
-// Decide conversation stage
-// ===================================
+        // Count Answered Preferences
+        // ===================================
 
-if (
-    answeredFields >= 3 ||
-    missing.length === 0 ||
-    session.questionsAsked >= session.questionLimit ||
-    session.conversationStage === "recommendation"
-) {
-    session.conversationStage = "recommendation";
-} else {
-    session.conversationStage = "collecting";
+        const compatibilityFields = [
+
+            session.profile.personality,
+            session.profile.studySchedule,
+            session.profile.sleepSchedule,
+            session.profile.cleanliness,
+            session.profile.foodPreference,
+            session.profile.smoking,
+            session.profile.drinking
+
+        ];
+
+        const answeredFields =
+            compatibilityFields.filter(
+                value =>
+                    value !== null &&
+                    value !== ""
+            ).length;
+
+        // ===================================
+        // Conversation Stage
+        // ===================================
+
+        if (
+            answeredFields >= 3 ||
+            missing.length === 0 ||
+            session.questionsAsked >=
+                session.questionLimit ||
+            session.conversationStage ===
+                "recommendation"
+        ) {
+
+            session.conversationStage =
+                "recommendation";
+
+        }
+        else {
+
+            session.conversationStage =
+                "collecting";
+
+        }
+
+        // ===================================
+        // COLLECTING STAGE
+        // ===================================
+
+        if (
+            session.conversationStage ===
+            "collecting"
+        ) {
+
+            const questionsRemaining =
+                Math.max(
+                    0,
+                    session.questionLimit -
+                    session.questionsAsked
+                );
+
+            const questions =
+                missing
+                    .slice(0, questionsRemaining)
+                    .map(q => q.question);
+
+            if (questions.length === 0) {
+
+                session.conversationStage =
+                    "recommendation";
+
+            }
+            else {
+
+                const reply =
+                    questions
+                        .map(q => q)
+                        .join("\n");
+
+                const questionCount =
+                    (reply.match(/\?/g) || [])
+                        .length;
+
+                session.questionsAsked +=
+                    questionCount;
+
+                session.history.push({
+
+                    role: "assistant",
+
+                    content: reply
+
+                });
+
+                return reply;
+
+            }
+
+        }
+
+        // ===================================
+        // RECOMMENDATION STAGE
+        // ===================================
+
+        const roommates =
+            await findRoommates(
+                session.profile,
+                userId
+            );
+
+        // ===================================
+        // No Roommates
+        // ===================================
+
+        if (roommates.length === 0) {
+
+            const reply = `
+I couldn't find a roommate who matches your current preferences.
+
+You can try:
+• A different location
+• A slightly different budget
+• Fewer preferences
+
+You can also tell me "recommend now" and I'll search using the information you've already provided.
+            `.trim();
+
+            session.history.push({
+
+                role: "assistant",
+
+                content: reply
+
+            });
+
+            return reply;
+
+        }
+
+        // ===================================
+        // Calculate Match Scores
+        // ===================================
+
+        const rankedRoommates =
+            roommates
+                .map(roommate => ({
+
+                    ...roommate,
+
+                    matchScore:
+                        calculateMatch(
+                            session.profile,
+                            roommate
+                        )
+
+                }))
+                .sort(
+                    (a, b) =>
+                        b.matchScore -
+                        a.matchScore
+                )
+                .slice(0, 5);
+
+        // ===================================
+        // Prepare Real Data for Groq
+        // ===================================
+
+        const roommateData =
+            rankedRoommates
+                .map(
+                    (roommate, index) => `
+
+ROOMMATE ${index + 1}
+
+Name: ${roommate.name || "Not available"}
+
+Email: ${roommate.email || "Not available"}
+
+Phone: ${roommate.phone || "Not available"}
+
+Gender: ${roommate.preferred_gender || "Not available"}
+
+Study Time: ${roommate.study_time || "Not available"}
+
+Sleep Time: ${roommate.sleep_time || "Not available"}
+
+Budget: ${
+    roommate.budget
+        ? `₹${roommate.budget}`
+        : "Not available"
 }
-        // Build user profile
-        const profileSummary = `
 
-Known User Information
+Location: ${
+    roommate.preferred_location ||
+    "Not available"
+}
 
-University : ${session.profile.university || "Unknown"}
+Smoking: ${
+    roommate.smoking_preference ||
+    "Not available"
+}
 
-Preferred Location : ${session.profile.location || "Unknown"}
+Food Preference: ${
+    roommate.food_preference ||
+    "Not available"
+}
 
-Budget : ${session.profile.budget || "Unknown"}
+Compatibility Score: ${roommate.matchScore}%
 
-Personality : ${session.profile.personality || "Unknown"}
+--------------------------------
+`
+                )
+                .join("\n");
 
-Study Schedule : ${session.profile.studySchedule || "Unknown"}
+        // ===================================
+        // User Profile
+        // ===================================
 
-Sleep Schedule : ${session.profile.sleepSchedule || "Unknown"}
+        const profileData = `
 
-Cleanliness : ${session.profile.cleanliness || "Unknown"}
+User Preferences
 
-Food Preference : ${session.profile.foodPreference || "Unknown"}
+Personality:
+${session.profile.personality || "Not provided"}
 
-Smoking : ${session.profile.smoking || "Unknown"}
+Study Schedule:
+${session.profile.studySchedule || "Not provided"}
 
-Drinking : ${session.profile.drinking || "Unknown"}
+Sleep Schedule:
+${session.profile.sleepSchedule || "Not provided"}
 
+Cleanliness:
+${session.profile.cleanliness || "Not provided"}
+
+Food:
+${session.profile.foodPreference || "Not provided"}
+
+Smoking:
+${session.profile.smoking || "Not provided"}
+
+Drinking:
+${session.profile.drinking || "Not provided"}
+
+Location:
+${session.profile.location || "Not provided"}
+
+Budget:
+${
+    session.profile.budget
+        ? `₹${session.profile.budget}`
+        : "Not provided"
+}
 `;
+
+        // ===================================
+        // Groq Prompt
+        // ===================================
 
         const systemPrompt = `
 
-You are UniNest AI Roommate Assistant.
+You are UniNest AI Roommate Matching Assistant.
 
-Current Conversation Stage:
+Your job is to present REAL roommate profiles returned by the database.
 
-${session.conversationStage}
+IMPORTANT RULES:
 
-KNOWN USER PROFILE
+1. NEVER invent a roommate name.
 
-University:
-${session.profile.university || "Unknown"}
+2. NEVER invent an email, phone number,
+   university, location, budget or preference.
 
-Location:
-${session.profile.location || "Unknown"}
+3. ONLY use the supplied ROOMMATE DATA.
 
-Budget:
-${session.profile.budget || "Unknown"}
+4. Show the roommate's REAL name.
 
-Personality:
-${session.profile.personality || "Unknown"}
+5. Show the compatibility percentage.
 
-Study Schedule:
-${session.profile.studySchedule || "Unknown"}
+6. Explain briefly why the roommate matches.
 
-Sleep Schedule:
-${session.profile.sleepSchedule || "Unknown"}
+7. If information says "Not available",
+   do not guess it.
 
-Cleanliness:
-${session.profile.cleanliness || "Unknown"}
+8. Do NOT ask additional questions.
 
-Food:
-${session.profile.foodPreference || "Unknown"}
+9. Do NOT give generic advice instead of profiles.
 
-Smoking:
-${session.profile.smoking || "Unknown"}
+10. Return the best 1–5 actual roommate profiles.
 
-Drinking:
-${session.profile.drinking || "Unknown"}
+11. Keep the response concise.
 
-RULES
+Use this format:
 
-If stage is collecting
+🏠 Recommended Roommates
 
-• Ask ONLY missing roommate compatibility questions.
-• NEVER ask for university, budget, location, or accommodation details.
-• Never ask a question that the user has already answered.
-• Ask no more than the remaining question limit.
-• The user does NOT have to answer every question.
-• If the user provides only 1, 2, or 3 answers, use those answers.
-• If the user asks to stop, immediately move to recommendation.
-• If the user says "ask only 2 questions", ask only 2 questions.
-• If the user says "ask only 3 questions", ask only 3 questions.
+### 1. [Real Name] — [Score]%
 
-If stage is recommendation
+📍 Location:
+💰 Budget:
+📚 Study Time:
+😴 Sleep Time:
+👤 Gender:
+🍴 Food:
+🚭 Smoking:
 
-• Do NOT ask more questions.
-• Use the information already provided.
-• Give the best roommate recommendation possible.
-• Clearly mention that the recommendation is based on the information provided.
-• Explain why the roommate is compatible.
-• Give useful roommate tips.
+**Why this is a good match:**
+Brief explanation based ONLY on the supplied data.
+
+Then repeat for the other roommates.
 
 `;
 
         const messages = [
 
-{
-role:"system",
-content:systemPrompt
-},
+            {
+                role: "system",
+                content: systemPrompt
+            },
 
-...session.history,
+            {
+                role: "user",
+                content: `
 
-{
-role:"user",
+${profileData}
 
-content:`
+DATABASE ROOMMATES
 
-Missing Questions
+${roommateData}
 
-${missing
-    .slice(
-        0,
-        Math.max(
-            0,
-            session.questionLimit - session.questionsAsked
-        )
-    )
-    .map(x => "- " + x.question)
-    .join("\n")}
-
-Current User Message
-
-${message}
-
+Return the best matching real roommates.
 `
+            }
 
-}
-
-];
-
-        const completion = await groq.chat.completions.create({
-
-            model: "openai/gpt-oss-20b",
-
-            messages,
-
-            temperature: 0.4,
-
-            max_tokens: 500
-
-        });
-
-        const reply = completion.choices[0].message.content;
+        ];
 
         // ===================================
-// Count questions asked
-// ===================================
+        // Groq
+        // ===================================
 
-const questionCount = (reply.match(/\?/g) || []).length;
+        const completion =
+            await groq.chat.completions.create({
 
-session.questionsAsked += questionCount;
+                model:
+                    "openai/gpt-oss-20b",
 
-if (session.questionsAsked >= session.questionLimit) {
-    session.conversationStage = "recommendation";
-}
+                messages,
+
+                temperature: 0.2,
+
+                max_tokens: 900
+
+            });
+
+        const reply =
+            completion
+                .choices[0]
+                .message
+                .content
+                .trim();
+
+        // ===================================
+        // Save Assistant Response
+        // ===================================
 
         session.history.push({
 
@@ -589,22 +1039,28 @@ if (session.questionsAsked >= session.questionLimit) {
 
         if (session.history.length > 30) {
 
-    session.history =
-        session.history.slice(-30);
+            session.history =
+                session.history.slice(-30);
 
-}
+        }
 
-        const finalReply = reply.trim();
-
-return finalReply;
+        return reply;
 
     }
 
     catch (err) {
 
+        console.error(
+            "========== ROOMMATE AI ERROR =========="
+        );
+
         console.error(err);
 
-        return "Sorry, I'm unable to answer right now.";
+        console.error(
+            "======================================="
+        );
+
+        return "Sorry, I'm unable to find roommates right now.";
 
     }
 

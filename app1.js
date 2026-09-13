@@ -5,7 +5,7 @@
 /* =========================
    THEME TOGGLE
 ========================= */
-const API_URL = "https://uninest-oqx4.onrender.com";
+const API_URL = "https://uninestbackend.onrender.com";
 
 const themeToggle = document.getElementById("themeToggle");
 const html = document.documentElement;
